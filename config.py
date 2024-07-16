@@ -3,7 +3,12 @@ import os
 class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'postgresql://dinah5:123456@localhost/lost_and_found')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = os.getenv('SECRET_KEY', 'mysecretkey')
+    SECRET_KEY = os.environ.get('FLASK_SECRET_KEY') or 'you-will-never-guess'
     SESSION_TYPE = 'filesystem'
     SESSION_COOKIE_SECURE = False
-    # Instance-specific configurations (if any)
+    DEBUG = True  # Set to False in production
+    BCRYPT_LOG_ROUNDS = 12  # Number of hashing rounds
+    # Flask-Login settings
+    LOGIN_DISABLED = False  # Set to True to disable login
+    
+
