@@ -11,6 +11,7 @@ class User(db.Model, UserMixin):
     claims = db.relationship('Claim', backref='user', lazy=True)
     rewards_received = db.relationship('Reward', foreign_keys='Reward.receiver_id', backref='receiver', lazy=True)
     rewards_paid = db.relationship('Reward', foreign_keys='Reward.payer_id', backref='payer', lazy=True)
+    is_admin = db.Column(db.Boolean, default=False)
 
     @property
     def password(self):

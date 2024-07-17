@@ -5,6 +5,7 @@ from app.models.claim import Claim
 from app.models.lost_report import LostReport
 from app.models.found_report import FoundReport
 from app.models.reward import Reward
+from app.models.comment import Comment
 from app.extensions import bcrypt
 
 def populate_database():
@@ -57,6 +58,10 @@ def populate_database():
     reward1 = Reward(item_id=item2.id, payer_id=user2.id, receiver_id=user1.id, amount=50, date_paid='2024-07-04')
 
     db.session.add(reward1)
+    db.session.commit()
+
+    comment1 = Comment(user_id=user2.id, item_id=item1.id, content='I think I saw this laptop in the library.')
+    db.session.add(comment1)
     db.session.commit()
 
     print("Database populated successfully.")

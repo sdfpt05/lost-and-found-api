@@ -3,8 +3,9 @@ import secrets
 from flask import Flask
 from flask_cors import CORS
 from .extensions import db, migrate, bcrypt, login_manager
-from .models import user, item, lost_report, found_report, claim, reward
+from .models import user, item, lost_report, found_report, claim, reward, comment, lost_report, found_report
 from dotenv import load_dotenv
+
 
 def create_app():
     app = Flask(__name__)
@@ -30,15 +31,16 @@ def register_extensions(app):
     login_manager.init_app(app)
 
 def register_blueprints(app):
-    from .routes import auth, admin, user, item, lost_report, found_report, claim, reward
+    from .routes import auth, admin, user, item,  claim, reward, comment, main
     app.register_blueprint(auth.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(item.bp)
-    app.register_blueprint(lost_report.bp)
-    app.register_blueprint(found_report.bp)
     app.register_blueprint(claim.bp)
     app.register_blueprint(reward.bp)
+    app.register_blueprint(comment.bp)
+    app.register_blueprint(main.bp)
+
 
 def configure_cors(app):
     CORS(app, supports_credentials=True)
