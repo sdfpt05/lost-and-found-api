@@ -2,10 +2,12 @@ import os
 import secrets
 from flask import Flask
 from flask_cors import CORS
+from flask_login import LoginManager
 from .extensions import db, migrate, bcrypt, login_manager
 from .models import user, item, lost_report, found_report, claim, reward, comment, lost_report, found_report
 from dotenv import load_dotenv
 
+login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
@@ -30,10 +32,15 @@ def register_extensions(app):
     bcrypt.init_app(app)
     login_manager.init_app(app)
 
+    @login_manager.user_loader
+    def load_user(user_id):
+        # Assuming User is imported correctly from your models
+        return user.User.query.get(int(user_id))
+
 def register_blueprints(app):
     from .routes import auth, admin, user, item,  claim, reward, comment, main
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(admin.bp)
+    app.register_blueprint(auth.bp,  url_prefix='/auth')
+    app.register_blueprint(admin.bp, url_prefix='/admin')
     app.register_blueprint(user.bp)
     app.register_blueprint(item.bp)
     app.register_blueprint(claim.bp)
