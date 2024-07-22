@@ -12,12 +12,15 @@ def register():
         username = data['username']
         email = data['email']
         password = data['password']
+        is_admin = 'is_admin' in data  # Check if the checkbox is selected
         
         if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
             return jsonify({'message': 'User already exists'}), 400
         
         user = User(username=username, email=email)
         user.password = password
+        user.is_admin = is_admin  
+
         db.session.add(user)
         db.session.commit()
         
@@ -38,7 +41,12 @@ def login():
             return jsonify({'message': 'Invalid username or password'}), 400
         
         login_user(user)
-        return redirect(url_for('user.dashboard'))
+        # Redirect based on user role
+        if user.is_admin():  
+            return redirect(url_for('admin.dashboard'))
+        else:
+            return redirect(url_for('user.dashboard'))
+        
     
     return render_template('login.html')
 
