@@ -38,11 +38,12 @@ def register_extensions(app):
         return user.User.query.get(int(user_id))
 
 def register_blueprints(app):
-    from .routes import auth, admin, user, item,  claim, reward, comment, main
+    from .routes import auth, admin, user, item,  claim, reward, comment, main, report
     app.register_blueprint(auth.bp,  url_prefix='/auth')
     app.register_blueprint(admin.bp, url_prefix='/admin')
     app.register_blueprint(user.bp)
     app.register_blueprint(item.bp)
+    app.register_blueprint(report.bp)
     app.register_blueprint(claim.bp)
     app.register_blueprint(reward.bp)
     app.register_blueprint(comment.bp)

@@ -38,7 +38,7 @@ def login():
             return jsonify({'message': 'Invalid username or password'}), 400
         
         login_user(user)
-        return redirect(url_for('main.home'))
+        return redirect(url_for('user.dashboard'))
     
     return render_template('login.html')
 

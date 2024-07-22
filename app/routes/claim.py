@@ -5,15 +5,11 @@ from app.extensions import db
 
 bp = Blueprint('claim', __name__, url_prefix='/claim')
 
-@bp.route('/<int:item_id>', methods=['POST'])
+@bp.route('/initiate', methods=['POST'])
 @login_required
-def claim_item(item_id):
-    claim = Claim(
-        user_id=current_user.id,
-        item_id=item_id,
-        date_claimed=request.form['date_claimed'],
-        description=request.form.get('description')
-    )
+def initiate_claim():
+    data = request.form
+    claim = Claim(user_id=current_user.id, found_item_id=data['found_item_id'], claim_reason=data['claim_reason'])
     db.session.add(claim)
     db.session.commit()
-    return jsonify({'message': 'Claim submitted successfully'}), 201
+    return jsonify({'message': 'Claim initiated successfully'}), 201
