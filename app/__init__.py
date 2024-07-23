@@ -39,7 +39,7 @@ def register_extensions(app):
         return user.User.query.get(int(user_id))
 
 def register_blueprints(app):
-    from .routes import auth, admin, user, item,  claim, reward, comment, main, report
+    from .routes import auth, admin, user, item,  claim, reward, comment, main, report, upload
     app.register_blueprint(auth.bp,  url_prefix='/auth')
     app.register_blueprint(admin.bp, url_prefix='/admin')
     app.register_blueprint(user.bp)
@@ -49,6 +49,7 @@ def register_blueprints(app):
     app.register_blueprint(reward.bp)
     app.register_blueprint(comment.bp)
     app.register_blueprint(main.bp)
+    app.register_blueprint(upload.bp)
 
 
 def configure_cors(app):
