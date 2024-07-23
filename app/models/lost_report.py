@@ -6,3 +6,5 @@ class LostReport(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     date_reported = db.Column(db.Date, nullable=False)
     description = db.Column(db.String(255), nullable=True)
+
+    user = db.relationship('User', back_populates='lost_reports')

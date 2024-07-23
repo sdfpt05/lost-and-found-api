@@ -10,15 +10,6 @@ from app.utils.decorators import admin_required
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
-def admin_required(f):
-    """Decorator to check if the current user is an admin."""
-    from functools import wraps
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not current_user.is_admin():
-            return jsonify({'message': 'Access denied'}), 403
-        return f(*args, **kwargs)
-    return decorated_function
 
 @bp.route('/dashboard')
 @login_required

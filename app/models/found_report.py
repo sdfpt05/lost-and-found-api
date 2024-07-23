@@ -6,3 +6,6 @@ class FoundReport(db.Model):
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     date_reported = db.Column(db.Date, nullable=False) 
     description = db.Column(db.String(255), nullable=True)
+
+    claims = db.relationship('Claim', back_populates='found_item')
+    user = db.relationship('User', back_populates='found_reports')

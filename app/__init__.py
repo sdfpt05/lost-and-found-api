@@ -4,8 +4,9 @@ from flask import Flask
 from flask_cors import CORS
 from flask_login import LoginManager
 from .extensions import db, migrate, bcrypt, login_manager
-from .models import user, item, lost_report, found_report, claim, reward, comment, lost_report, found_report
+from .models import user, item, lost_report, found_report, claim, reward, comment
 from dotenv import load_dotenv
+from flask_wtf.csrf import CSRFProtect
 
 login_manager = LoginManager()
 

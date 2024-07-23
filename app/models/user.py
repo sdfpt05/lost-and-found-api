@@ -6,12 +6,13 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(150), nullable=False)
-    lost_reports = db.relationship('LostReport', backref='user', lazy=True)
-    found_reports = db.relationship('FoundReport', backref='user', lazy=True)
-    claims = db.relationship('Claim', backref='user', lazy=True)  
-    rewards_received = db.relationship('Reward', foreign_keys='Reward.receiver_id', backref='receiver', lazy=True)
-    rewards_paid = db.relationship('Reward', foreign_keys='Reward.payer_id', backref='payer', lazy=True)
+    lost_reports = db.relationship('LostReport', back_populates='user', lazy=True)
+    found_reports = db.relationship('FoundReport', back_populates='user', lazy=True)
+    claims = db.relationship('Claim', back_populates='claim_user', lazy=True)  
+    rewards_received = db.relationship('Reward', foreign_keys='Reward.receiver_id', back_populates='receiver', lazy=True)
+    rewards_paid = db.relationship('Reward', foreign_keys='Reward.payer_id', back_populates='payer', lazy=True)
     is_admin = db.Column(db.Boolean, default=False)   
+    
 
     @property
     def password(self):
