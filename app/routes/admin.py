@@ -86,3 +86,5 @@ def approve_lost_report(report_id):
     report.approved = True
     db.session.commit()
     return jsonify({'message': 'Lost report approved successfully'}), 200
+
+    
