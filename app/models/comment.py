@@ -7,5 +7,5 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable=False)
 
-    user = db.relationship('User', backref=db.backref('comments', lazy=True))
-    item = db.relationship('Item', backref=db.backref('comments', lazy=True))
+    user = db.relationship('User', back_populates='comments')
+    item = db.relationship('Item', back_populates='comments')

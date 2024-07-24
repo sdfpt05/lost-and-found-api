@@ -8,7 +8,10 @@
 <h3>Items</h3>
 <ul>
     {% for item in items %}
-        <li>{{ item.name }} - {{ item.description }} </li>
+        <li>{{ item.name }} - {{ item.description }} 
+            <a href="{{ url_for('admin.update_item', item_id=item.id) }}">Edit</a> |
+            <a href="{{ url_for('admin.delete_item', item_id=item.id) }}">Delete</a>
+        </li>
     {% endfor %}
 </ul>
 
@@ -25,4 +28,35 @@
     <br>
     <button type="submit">Add Item</button>
 </form>
+
+<h3>Lost Reports</h3>
+<ul>
+    {% for report in lost_reports %}
+        <li>{{ report.description }}
+            <a href="{{ url_for('admin.approve_lost_report', report_id=report.id) }}">Approve</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<h3>Found Reports</h3>
+<ul>
+    {% for report in found_reports %}
+        <li>{{ report.description }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Claims</h3>
+<ul>
+    {% for claim in claims %}
+        <li>{{ claim.description }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Rewards</h3>
+<ul>
+    {% for reward in rewards %}
+        <li>{{ reward.description }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}
+

@@ -16,7 +16,12 @@ bp = Blueprint('admin', __name__, url_prefix='/admin')
 @admin_required
 def dashboard():
     items = Item.query.all()
-    return render_template('admin_dashboard.html', items=items)
+    items = Item.query.all()
+    lost_reports = LostReport.query.all()
+    found_reports = FoundReport.query.all()
+    claims = Claim.query.all()
+    rewards = Reward.query.all()
+    return render_template('admin_dashboard.html', items=items, lost_reports=lost_reports, found_reports=found_reports, claims=claims, rewards=rewards)
 
 @bp.route('/items', methods=['POST'])
 @login_required

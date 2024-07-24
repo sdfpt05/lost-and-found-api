@@ -5,5 +5,6 @@ class Item(db.Model):
     name = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(250), nullable=True)
-    lost_reports = db.relationship('LostReport', backref='item', lazy=True)
-    found_reports = db.relationship('FoundReport', backref='item', lazy=True)
+    lost_reports = db.relationship('LostReport', back_populates='item', lazy=True)  
+    found_reports = db.relationship('FoundReport', back_populates='item', lazy=True)
+    comments = db.relationship('Comment', back_populates='item')
