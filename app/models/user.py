@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     claims = db.relationship('Claim', back_populates='claim_user', lazy=True)  
     rewards_received = db.relationship('Reward', foreign_keys='Reward.receiver_id', back_populates='receiver', lazy=True)
     rewards_paid = db.relationship('Reward', foreign_keys='Reward.payer_id', back_populates='payer', lazy=True)
-      
+    reset_tokens = db.relationship('PasswordResetToken', back_populates='user', lazy=True)  
     
 
     @property

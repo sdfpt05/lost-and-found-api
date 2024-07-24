@@ -3,8 +3,8 @@ import secrets
 from flask import Flask
 from flask_cors import CORS
 from flask_login import LoginManager
-from .extensions import db, migrate, bcrypt, login_manager
-from .models import user, item, lost_report, found_report, claim, reward, comment
+from .extensions import db, migrate, bcrypt, login_manager, mail
+from .models import user, item, lost_report, found_report, claim, reward, comment, admin, password_reset
 from dotenv import load_dotenv
 from flask_wtf.csrf import CSRFProtect
 
@@ -32,6 +32,7 @@ def register_extensions(app):
     migrate.init_app(app, db)
     bcrypt.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):
