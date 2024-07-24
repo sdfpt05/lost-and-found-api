@@ -77,3 +77,12 @@ def view_rewards():
     rewards = Reward.query.all()
     return jsonify([reward.to_dict() for reward in rewards]), 200
 
+
+@bp.route('/reports/lost/<int:report_id>/approve', methods=['POST'])
+@login_required
+@admin_required
+def approve_lost_report(report_id):
+    report = LostReport.query.get_or_404(report_id)
+    report.approved = True
+    db.session.commit()
+    return jsonify({'message': 'Lost report approved successfully'}), 200

@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
     claims = db.relationship('Claim', back_populates='claim_user', lazy=True)  
     rewards_received = db.relationship('Reward', foreign_keys='Reward.receiver_id', back_populates='receiver', lazy=True)
     rewards_paid = db.relationship('Reward', foreign_keys='Reward.payer_id', back_populates='payer', lazy=True)
-    is_admin = db.Column(db.Boolean, default=False)   
+      
     
 
     @property
@@ -25,5 +25,4 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
 
-    def is_admin(self):
-        return self.is_admin
+  

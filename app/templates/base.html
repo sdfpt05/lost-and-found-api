@@ -5,6 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <title>{% block title %}Lost and Found{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+        }
+        header p {
+            margin: 0.5rem 0 0;
+        }
+        header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+        header a:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        form label {
+            margin-top: 0.5rem;
+        }
+        form input {
+            padding: 0.5rem;
+            margin-top: 0.2rem;
+        }
+        form button {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -12,7 +69,12 @@
         {% if current_user.is_authenticated %}
             <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('auth.logout') }}">Logout</a></p>
         {% else %}
-            <p><a href="{{ url_for('auth.login') }}">Login</a> | <a href="{{ url_for('auth.register') }}">Register</a></p>
+            <p>
+                <a href="{{ url_for('auth.login_user') }}">User Login</a> |
+                <a href="{{ url_for('auth.login_admin') }}">Admin Login</a> |
+                <a href="{{ url_for('auth.register_user') }}">User Register</a> |
+                <a href="{{ url_for('auth.register_admin') }}">Admin Register</a>
+            </p>
         {% endif %}
     </header>
     <main>
