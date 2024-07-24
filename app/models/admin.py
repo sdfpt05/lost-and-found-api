@@ -1,4 +1,4 @@
-from app.extensions import db
+from app.extensions import db, bcrypt
 from flask_login import UserMixin
 
 class Admin(UserMixin, db.Model):
@@ -10,6 +10,7 @@ class Admin(UserMixin, db.Model):
     zip_code = db.Column(db.String(10), nullable=False)
     email = db.Column(db.String(150), nullable=False, unique=True)
     password_hash = db.Column(db.String(200), nullable=False)
+    users = db.relationship('User', back_populates='admin')  # Relationship
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
