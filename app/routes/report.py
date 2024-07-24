@@ -32,9 +32,10 @@ def report_lost_item():
     file = request.files.get('upload_image')  # Get the uploaded file if available
 
     try:
-        date_reported = datetime.strptime(data['date_reported'], '%Y-%m-%d').date()  # Convert to date object
+        date_lost = datetime.strptime(data['date_lost'], '%Y-%m-%d').date()  # Convert to date object
+        time_lost = datetime.strptime(data['time_lost'], '%H:%M:%S').time()  # Convert to time object
     except ValueError:
-        return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD.'}), 400
+        return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
 
     item = Item.query.get(data['item_id'])
     if not item:
@@ -46,11 +47,11 @@ def report_lost_item():
         user_id=current_user.id,
         item_id=data['item_id'],
         item_name=item.name,  # Store the item name
-        date_reported=date_reported,
-        found_date=data.get('found_date'),
-        found_time=data.get('found_time'),
+        date_lost=date_lost,
+        time_lost=time_lost,
         description=data.get('description'),
         primary_color=data.get('primary_color'),
+        secondary_color=data.get('secondary_color'),
         upload_image=image_url
     )
     db.session.add(lost_report)
@@ -65,8 +66,9 @@ def report_found_item():
 
     try:
         date_found = datetime.strptime(data['date_found'], '%Y-%m-%d').date()  # Convert to date object
+        time_found = datetime.strptime(data['time_found'], '%H:%M:%S').time()  # Convert to time object
     except ValueError:
-        return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD.'}), 400
+        return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
 
     item = Item.query.get(data['item_id'])
     if not item:
@@ -79,7 +81,7 @@ def report_found_item():
         item_id=data['item_id'],
         item_name=item.name,  # Store the item name
         date_found=date_found,
-        time_found=data.get('time_found'),
+        time_found=time_found,
         description=data.get('description'),
         primary_color=data.get('primary_color'),
         secondary_color=data.get('secondary_color'),
