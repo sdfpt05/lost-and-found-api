@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Receive Reward</h1>
+    <form action="{{ url_for('reward.receive_reward') }}" method="post">
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+        </div>
+        <div class="form-group">
+            <label for="date_paid">Date Paid:</label>
+            <input type="date" class="form-control" id="date_paid" name="date_paid" required>
+        </div>
+        <div class="form-group">
+            <label for="payer_id">Payer ID:</label>
+            <input type="number" class="form-control" id="payer_id" name="payer_id" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Receive Reward</button>
+    </form>
+</div>
+{% endblock %}

@@ -36,11 +36,10 @@ def register_extensions(app):
 
     @login_manager.user_loader
     def load_user(user_id):
-        # Assuming User is imported correctly from your models
         return user.User.query.get(int(user_id))
 
 def register_blueprints(app):
-    from .routes import auth, admin, user, item,  claim, reward, comment, main, report, upload
+    from .routes import auth, admin, user, item,  claim, reward, comment, main, report, upload, password_reset
     app.register_blueprint(auth.bp,  url_prefix='/auth')
     app.register_blueprint(admin.bp, url_prefix='/admin')
     app.register_blueprint(user.bp)
@@ -51,6 +50,7 @@ def register_blueprints(app):
     app.register_blueprint(comment.bp)
     app.register_blueprint(main.bp)
     app.register_blueprint(upload.bp)
+    app.register_blueprint(password_reset.bp)
 
 
 def configure_cors(app):
