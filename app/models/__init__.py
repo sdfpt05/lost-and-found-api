@@ -5,3 +5,4 @@ from .found_report import FoundReport
 from .claim import Claim
 from .reward import Reward
 from .comment import Comment
+from .password_reset import PasswordResetToken
