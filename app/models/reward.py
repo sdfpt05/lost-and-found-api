@@ -3,7 +3,7 @@ from app.extensions import db
 class Reward(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float, nullable=False)
-    date_given = db.Column(db.Date, nullable=False)
+    date_paid = db.Column(db.Date, nullable=False)
     receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     payer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     

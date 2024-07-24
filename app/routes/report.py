@@ -18,12 +18,21 @@ def handle_image_upload(file, item_id):
     def allowed_file(filename):
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
+
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file_path = os.path.join(UPLOAD_FOLDER, filename)
-        file.save(file_path)
-        return url_for('static', filename=f'uploads/{filename}')
-    return None
+        try:
+            file.save(file_path)
+            return url_for('static', filename=f'uploads/{filename}')
+        except Exception as e:
+            print(f"Error saving file: {e}")
+            return None
+    else:
+        print("Invalid file or file type not allowed.")
+        return None
 
 @bp.route('/lost', methods=['POST'])
 @login_required
@@ -33,7 +42,7 @@ def report_lost_item():
 
     try:
         date_lost = datetime.strptime(data['date_lost'], '%Y-%m-%d').date()  # Convert to date object
-        time_lost = datetime.strptime(data['time_lost'], '%H:%M:%S').time()  # Convert to time object
+        time_lost = datetime.strptime(data['time_lost'], '%H:%M:%S').time()  #convert to time object
     except ValueError:
         return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
 
@@ -54,19 +63,24 @@ def report_lost_item():
         secondary_color=data.get('secondary_color'),
         upload_image=image_url
     )
-    db.session.add(lost_report)
-    db.session.commit()
+    try:
+        db.session.add(lost_report)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Error saving lost report: {e}'}), 500
+
     return jsonify({'message': 'Lost report submitted successfully'}), 201
 
 @bp.route('/found', methods=['POST'])
 @login_required
 def report_found_item():
     data = request.form
-    file = request.files.get('upload_image')  # Get the uploaded file if available
+    file = request.files.get('upload_image')  
 
     try:
-        date_found = datetime.strptime(data['date_found'], '%Y-%m-%d').date()  # Convert to date object
-        time_found = datetime.strptime(data['time_found'], '%H:%M:%S').time()  # Convert to time object
+        date_found = datetime.strptime(data['date_found'], '%Y-%m-%d').date() 
+        time_found = datetime.strptime(data['time_found'], '%H:%M:%S').time()  
     except ValueError:
         return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
 
@@ -87,6 +101,11 @@ def report_found_item():
         secondary_color=data.get('secondary_color'),
         upload_image=image_url
     )
-    db.session.add(found_report)
-    db.session.commit()
+    try:
+        db.session.add(found_report)
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'Error saving found report: {e}'}), 500
+
     return jsonify({'message': 'Found report submitted successfully'}), 201
