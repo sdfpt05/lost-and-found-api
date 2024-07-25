@@ -4,7 +4,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_login import LoginManager
 from .extensions import db, migrate, bcrypt, login_manager, mail
-from .models import user, item, lost_report, found_report, claim, reward, comment, admin, password_reset
+from .models import user, item, lost_report, found_report, claim, reward, comment, password_reset
 from dotenv import load_dotenv
 from flask_wtf.csrf import CSRFProtect
 
@@ -39,14 +39,12 @@ def register_extensions(app):
         return user.User.query.get(int(user_id))
 
 def register_blueprints(app):
-    from .routes import auth, admin, user, item,  claim, reward, comment, main, report, upload, password_reset
+    from .routes import auth, admin, user, item, comment, main, report, upload, password_reset
     app.register_blueprint(auth.bp,  url_prefix='/auth')
     app.register_blueprint(admin.bp, url_prefix='/admin')
     app.register_blueprint(user.bp)
     app.register_blueprint(item.bp)
     app.register_blueprint(report.bp)
-    app.register_blueprint(claim.bp)
-    app.register_blueprint(reward.bp)
     app.register_blueprint(comment.bp)
     app.register_blueprint(main.bp)
     app.register_blueprint(upload.bp)
