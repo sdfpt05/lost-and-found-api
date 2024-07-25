@@ -13,9 +13,9 @@
             padding: 0;
         }
         header {
-            background-color: #007bff;
+            background-color: #2983e4;
             color: white;
-            padding: 1rem;
+            padding: 0.7rem;
             text-align: center;
         }
         header h1 {
@@ -52,8 +52,8 @@
         }
         form button {
             margin-top: 1rem;
-            padding: 0.5rem;
-            background-color: #007bff;
+            padding: 0.3rem;
+            background-color: #245891;
             color: white;
             border: none;
             cursor: pointer;
@@ -65,7 +65,7 @@
 </head>
 <body>
     <header>
-        <h1>Lost and Found Inventory Management</h1>
+        <h2>Lost and Found Inventory Management</h2>
         {% if current_user.is_authenticated %}
             <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('auth.logout') }}">Logout</a></p>
         {% else %}

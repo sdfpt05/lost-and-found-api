@@ -1,15 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List of Lost Reports</title>
-</head>
-<body>
-    <h1>All Lost Reports</h1>
+<main>
+    <h1>Lost Reports</h1>
     <table>
         <thead>
             <tr>
@@ -25,15 +18,14 @@
             <tr>
                 <td>{{ report.item_name }}</td>
                 <td>{{ report.description }}</td>
-                <td>{{ report.date_lost }}</td>
+                <td>{{ report.date_lost.strftime('%Y-%m-%d') }}</td>
                 <td>{{ report.place_lost }}</td>
                 <td>
-                    <a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}">Provide Comment</a>
+                    <a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}" class="btn">Provide Comment</a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+</main>
 {% endblock %}
