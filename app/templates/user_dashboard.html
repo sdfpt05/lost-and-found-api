@@ -1,151 +1,24 @@
-{% extends 'base.html' %}
 
-{% block title %}User Dashboard{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
-<style>
-    .dashboard-section {
-        margin-bottom: 30px;
-    }
-    .dashboard-section h3 {
-        margin-top: 0;
-    }
-    .dashboard-section form {
-        margin-top: 10px;
-    }
-    .dashboard-section form input,
-    .dashboard-section form select,
-    .dashboard-section form textarea {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0 10px 0;
-        box-sizing: border-box;
-    }
-    .dashboard-section form button {
-        background-color: #4CAF50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-    }
-    .dashboard-section form button:hover {
-        background-color: #45a049;
-    }
-    .list-items {
-        margin-top: 20px;
-    }
-    .list-items ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    .list-items ul li {
-        background: #f4f4f4;
-        margin: 5px 0;
-        padding: 10px;
-        border: 1px solid #ddd;
-    }
-</style>
-
-<h2>User Dashboard</h2>
-<p>Welcome, {{ current_user.username }}!</p>
-
-<div class="dashboard-section">
-    <h3>Report Lost Item</h3>
-    <form action="{{ url_for('report.report_lost_item') }}" method="post">
-        <label for="lost_item_id">Item ID:</label>
-        <input type="number" id="lost_item_id" name="item_id" required>
-        <br>
-        <label for="lost_date_reported">Date Reported:</label>
-        <input type="date" id="lost_date_reported" name="date_reported" required>
-        <br>
-        <label for="lost_description">Description:</label>
-        <input type="text" id="lost_description" name="description">
-        <br>
-        <button type="submit">Report Lost Item</button>
-    </form>
-</div>
-
-<div class="dashboard-section">
-    <h3>Report Found Item</h3>
-    <form action="{{ url_for('report.report_found_item') }}" method="post">
-        <label for="found_item_id">Item ID:</label>
-        <input type="number" id="found_item_id" name="item_id" required>
-        <br>
-        <label for="found_date_reported">Date Reported:</label>
-        <input type="date" id="found_date_reported" name="date_reported" required>
-        <br>
-        <label for="found_description">Description:</label>
-        <input type="text" id="found_description" name="description">
-        <br>
-        <button type="submit">Report Found Item</button>
-    </form>
-</div>
-
-<div class="dashboard-section">
-    <h3>View All Reported Items</h3>
-    <div class="list-items">
-        <ul>
-            {% for item in reported_items %}
-                <li>{{ item.description }} - Reported on {{ item.date_reported }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
-
-<div class="dashboard-section">
-    <h3>Initiate Claim for Found Item</h3>
-    <form action="{{ url_for('claim.initiate_claim') }}" method="post">
-        <label for="claim_found_item_id">Found Item ID:</label>
-        <input type="number" id="claim_found_item_id" name="found_item_id" required>
-        <br>
-        <label for="claim_reason">Claim Reason:</label>
-        <textarea id="claim_reason" name="claim_reason" required></textarea>
-        <br>
-        <button type="submit">Initiate Claim</button>
-    </form>
-</div>
-
-<div class="dashboard-section">
-    <h3>Provide Comments about Reported Items</h3>
-    <form action="{{ url_for('comment.add_comment', item_id=item_id) }}" method="post">
-        <label for="comment_report_id">Report ID:</label>
-        <input type="number" id="comment_report_id" name="report_id" required>
-        <br>
-        <label for="comment_text">Comment:</label>
-        <textarea id="comment_text" name="comment" required></textarea>
-        <br>
-        <button type="submit">Submit Comment</button>
-    </form>
-</div>
-
-<div class="dashboard-section">
-    <h3>Manage Rewards</h3>
-    <form action="{{ url_for('reward.offer_reward') }}" method="post">
-        <label for="reward_found_item_id">Found Item ID:</label>
-        <input type="number" id="reward_found_item_id" name="found_item_id" required>
-        <br>
-        <label for="reward_amount">Reward Amount:</label>
-        <input type="number" id="reward_amount" name="reward_amount" required>
-        <br>
-        <button type="submit">Offer Reward</button>
-    </form>
-
-    <h4>Rewards Received</h4>
-    <div class="list-items">
-        <ul>
-            {% for reward in rewards_received %}
-                <li>{{ reward.amount }} - {{ reward.description }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <h4>Rewards Paid</h4>
-    <div class="list-items">
-        <ul>
-            {% for reward in rewards_paid %}
-                <li>{{ reward.amount }} - {{ reward.description }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
+    <header>
+        <h1>Welcome, {{ current_user.username }}!</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('report.report_lost_item') }}">Report Lost Item</a></li>
+                <li><a href="{{ url_for('report.report_found_item') }}">Report Found Item</a></li>
+                <li><a href="{{ url_for('report.view_all_reports') }}">View All Reported Items</a></li>
+                <li><a href="{{ url_for('report.initiate_claim') }}">Initiate Claim</a></li>
+                <li><a href="{{ url_for('report.add_comment') }}">Provide Comment</a></li>
+                <li><a href="{{ url_for('report.offer_reward') }}">Offer Reward</a></li>
+                <li><a href="{{ url_for('report.receive_reward') }}">Receive Reward</a></li>
+                <li><a href="{{ url_for('report.pay_reward') }}">Pay Reward</a></li>
+                <li><a href="{{ url_for('report.view_all_rewards') }}">View My Rewards</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- Content specific to each feature can be included here -->
+    </main>
 {% endblock %}

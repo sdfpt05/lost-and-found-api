@@ -1,23 +1,76 @@
-{% extends 'base.html' %}
-
-{% block title %}Register as a User{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
-<h2>Register User</h2>
-<form action="{{ url_for('auth.register_user') }}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    <br>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    <br>
-    <label for="confirm_password">Confirm Password:</label>
-    <input type="password" id="confirm_password" name="confirm_password" required>
-    <br>
-    <button type="submit">Register</button>
-</form>
-<p><a href="{{ url_for('auth.login_user') }}">Already have an account? Login here</a></p>
+    <h1>Register</h1>
+    <form method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="username" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" required><br>
+
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" name="confirm_password" required><br>
+
+        <!-- Dropdown for role selection -->
+        <label for="role">Role:</label>
+        <select name="role">
+            <option value="user" selected>User</option>
+            <option value="admin">Admin</option>
+        </select><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+{% endblock %}
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Register</h1>
+    <form method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="username" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" required><br>
+
+        <label for="confirm_password">Confirm Password:</label>
+        <input type="password" name="confirm_password" required><br>
+
+        <!-- Dropdown for role selection -->
+        <label for="role">Role:</label>
+        <select name="role">
+            <option value="user" selected>User</option>
+            <option value="admin">Admin</option>
+        </select><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <ul>
+        {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    {% endwith %}
+
+    <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a>.</p>
 {% endblock %}

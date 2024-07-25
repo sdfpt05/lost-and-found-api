@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Rewards Received</h1>
+    <ul>
+        {% for reward in rewards %}
+        <li>
+            <p>Amount: {{ reward.amount }}</p>
+            <p>Date Paid: {{ reward.date_paid }}</p>
+            <p>Payer Username: {{ reward.payer_username }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

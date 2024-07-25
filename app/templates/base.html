@@ -70,10 +70,8 @@
             <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('auth.logout') }}">Logout</a></p>
         {% else %}
             <p>
-                <a href="{{ url_for('auth.login_user') }}">User Login</a> |
-                <a href="{{ url_for('auth.login_admin') }}">Admin Login</a> |
-                <a href="{{ url_for('auth.register_user') }}">User Register</a> |
-                <a href="{{ url_for('auth.register_admin') }}">Admin Register</a>
+                <a href="{{ url_for('auth.login_user') }}">Login</a> |
+                <a href="{{ url_for('auth.register_user') }}">Sign Up</a> |
             </p>
         {% endif %}
     </header>
