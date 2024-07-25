@@ -9,16 +9,16 @@
     <title>Report Lost Item</title>
 </head>
 <body>
-    <h1>Report Lost Item</h1>
+    <h1>Submit Lost Report</h1>
     <form action="{{ url_for('report.report_lost_item') }}" method="post" enctype="multipart/form-data">
         <label for="item_name">What was lost</label>
         <input type="text" id="item_name" name="item_name" required><br><br>
         <label for="item_id">Item ID:</label>
         <input type="text" id="item_id" name="item_id" required><br><br>
         <label for="date_lost">Date Lost (YYYY-MM-DD):</label>
-        <input type="date" id="date_lost" name="date_lost" required><br><br>
+        <input type="text" id="date_found" name="date_found" placeholder="2024-07-02" required>
         <label for="time_lost">Time Lost (HH:MM:SS):</label>
-        <input type="time" id="time_lost" name="time_lost" required><br><br>
+        <input type="text" id="time_found" name="time_found" placeholder="10:08:00" required>
         <label for="place_lost">Place Lost:</label>
         <input type="text" id="place_lost" name="place_lost" required><br><br>
         <label for="contact">Contact Information:</label>

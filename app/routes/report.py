@@ -247,3 +247,45 @@ def list_all_lost_reports():
     lost_reports = LostReport.query.all()
     return render_template('list_lost_reports.html', lost_reports=lost_reports)
 
+@bp.route('/pay_reward', methods=['GET', 'POST'])
+@login_required
+def pay_reward():
+    if request.method == 'POST':
+        data = request.form
+        try:
+            amount = float(data['amount'])
+            date_paid = datetime.strptime(data['date_paid'], '%Y-%m-%d').date()
+            receiver_username = data['receiver_username']
+            
+            if amount <= 0:
+                return jsonify({'error': 'Reward amount must be positive.'}), 400
+            
+            receiver = User.query.filter_by(username=receiver_username).first()
+            if not receiver:
+                return jsonify({'error': 'Receiver not found.'}), 404
+            
+            reward = Reward(
+                amount=amount,
+                date_paid=date_paid,
+                receiver_id=receiver.id,
+                receiver_username=receiver.username,
+                payer_username=current_user.username,
+                payer_id=current_user.id
+            )
+            db.session.add(reward)
+            db.session.commit()
+            return jsonify({'message': 'Reward paid successfully'}), 201
+
+        except ValueError:
+            return jsonify({'error': 'Invalid data format. Ensure all fields are correct.'}), 400
+        except KeyError as e:
+            return jsonify({'error': f'Missing field: {str(e)}'}), 400
+
+    return render_template('pay_reward.html')
+
+@bp.route('/my_rewards', methods=['GET'])
+@login_required
+def view_my_rewards():
+    rewards_received = Reward.query.filter_by(receiver_id=current_user.id).all()
+    rewards_paid = Reward.query.filter_by(payer_id=current_user.id).all()
+    return render_template('view_my_rewards.html', rewards_received=rewards_received, rewards_paid=rewards_paid)

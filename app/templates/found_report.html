@@ -9,29 +9,39 @@
     <title>Report Found Item</title>
 </head>
 <body>
-    <h1>Report Found Item</h1>
+    <h1>Submit Found Report</h1>
     <form action="{{ url_for('report.report_found_item') }}" method="post" enctype="multipart/form-data">
-        <label for="item_name">What was found</label>
-        <input type="text" id="item_name" name="item_name" required><br><br>
-        <label for="item_id">Item ID:</label>
-        <input type="text" id="item_id" name="item_id" required><br><br>
-        <label for="date_found">Date Found (YYYY-MM-DD):</label>
-        <input type="date" id="date_found" name="date_found" required><br><br>
-        <label for="time_found">Time Found (HH:MM:SS):</label>
-        <input type="time" id="time_found" name="time_found" required><br><br>
-        <label for="place_found">Place Found:</label>
-        <input type="text" id="place_found" name="place_found" required><br><br>
-        <label for="contact">Contact Information:</label>
-        <input type="text" id="contact" name="contact"><br><br>
-        <label for="description">Description:</label>
-        <textarea id="description" name="description"></textarea><br><br>
-        <label for="primary_color">Primary Color:</label>
-        <input type="text" id="primary_color" name="primary_color"><br><br>
-        <label for="secondary_color">Secondary Color:</label>
-        <input type="text" id="secondary_color" name="secondary_color"><br><br>
-        <label for="upload_image">Upload image of the item found</label>
-        <input type="file" id="upload_image" name="upload_image"><br><br>
-        <button type="submit">Submit Found Report</button>
+        <label for="item_name">What was found:</label>
+    <input type="text" id="item_name" name="item_name" required>
+
+    <label for="item_id">Item ID:</label>
+    <input type="text" id="item_id" name="item_id" required>
+
+    <label for="date_found">Date Found (YYYY-MM-DD):</label>
+    <input type="text" id="date_found" name="date_found" placeholder="2024-07-02" required>
+
+    <label for="time_found">Time Found (HH:MM:SS):</label>
+    <input type="text" id="time_found" name="time_found" placeholder="10:08:00" required>
+
+    <label for="place_found">Place Found:</label>
+    <input type="text" id="place_found" name="place_found" required>
+
+    <label for="contact">Contact Information:</label>
+    <input type="text" id="contact" name="contact" required>
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea>
+
+    <label for="primary_color">Primary Color:</label>
+    <input type="text" id="primary_color" name="primary_color" required>
+
+    <label for="secondary_color">Secondary Color:</label>
+    <input type="text" id="secondary_color" name="secondary_color">
+
+    <label for="upload_image">Upload image of the item found:</label>
+    <input type="file" id="upload_image" name="upload_image">
+
+    <button type="submit">Submit</button>
     </form>
 </body>
 </html>
