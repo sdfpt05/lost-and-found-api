@@ -6,21 +6,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report Found Item</title>
+    <title>Report Lost Item</title>
 </head>
 <body>
-    <h1>Report Found Item</h1>
-    <form action="{{ url_for('report.report_found_item') }}" method="post" enctype="multipart/form-data">
-        <label for="item_name">What was found</label>
+    <h1>Report Lost Item</h1>
+    <form action="{{ url_for('report.report_lost_item') }}" method="post" enctype="multipart/form-data">
+        <label for="item_name">What was lost</label>
         <input type="text" id="item_name" name="item_name" required><br><br>
         <label for="item_id">Item ID:</label>
         <input type="text" id="item_id" name="item_id" required><br><br>
-        <label for="date_found">Date Found (YYYY-MM-DD):</label>
-        <input type="date" id="date_found" name="date_found" required><br><br>
-        <label for="time_found">Time Found (HH:MM:SS):</label>
-        <input type="time" id="time_found" name="time_found" required><br><br>
-        <label for="place_found">Place Found:</label>
-        <input type="text" id="place_found" name="place_found" required><br><br>
+        <label for="date_lost">Date Lost (YYYY-MM-DD):</label>
+        <input type="date" id="date_lost" name="date_lost" required><br><br>
+        <label for="time_lost">Time Lost (HH:MM:SS):</label>
+        <input type="time" id="time_lost" name="time_lost" required><br><br>
+        <label for="place_lost">Place Lost:</label>
+        <input type="text" id="place_lost" name="place_lost" required><br><br>
         <label for="contact">Contact Information:</label>
         <input type="text" id="contact" name="contact"><br><br>
         <label for="description">Description:</label>
@@ -29,9 +29,9 @@
         <input type="text" id="primary_color" name="primary_color"><br><br>
         <label for="secondary_color">Secondary Color:</label>
         <input type="text" id="secondary_color" name="secondary_color"><br><br>
-        <label for="upload_image">Upload image of the item found</label>
+        <label for="upload_image">Upload Image:</label>
         <input type="file" id="upload_image" name="upload_image"><br><br>
-        <button type="submit">Submit Found Report</button>
+        <button type="submit">Submit Lost Report</button>
     </form>
 </body>
 </html>

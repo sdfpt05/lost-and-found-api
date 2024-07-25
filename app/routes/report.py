@@ -11,7 +11,6 @@ from datetime import datetime
 from app.models.reward import Reward
 from app.models.user import User
 from datetime import date
-
 import os
 
 bp = Blueprint('report', __name__, url_prefix='/report')
@@ -40,81 +39,91 @@ def handle_image_upload(file, item_id):
         print("Invalid file or file type not allowed.")
         return None
 
-@bp.route('/lost', methods=['POST'])
+@bp.route('/lost', methods=['GET', 'POST'])
 @login_required
 def report_lost_item():
-    data = request.form
-    file = request.files.get('upload_image')
+    if request.method == 'POST':
+        data = request.form
+        file = request.files.get('upload_image')
 
-    try:
-        date_lost = datetime.strptime(data['date_lost'], '%Y-%m-%d').date()
-        time_lost = datetime.strptime(data['time_lost'], '%H:%M:%S').time()
-    except ValueError:
-        return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
+        try:
+            date_lost = datetime.strptime(data['date_lost'], '%Y-%m-%d').date()
+            time_lost = datetime.strptime(data['time_lost'], '%H:%M:%S').time()
+        except ValueError:
+            return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
 
-    item = Item.query.get(data['item_id'])
-    if not item:
-        return jsonify({'error': 'Item not found.'}), 404
+        item = Item.query.get(data['item_id'])
+        if not item:
+            return jsonify({'error': 'Item not found.'}), 404
 
-    image_url = handle_image_upload(file, data['item_id']) if file else None
+        image_url = handle_image_upload(file, data['item_id']) if file else None
 
-    lost_report = LostReport(
-        user_id=current_user.id,
-        item_id=data['item_id'],
-        item_name=item.name,
-        date_lost=date_lost,
-        time_lost=time_lost,
-        description=data.get('description'),
-        primary_color=data.get('primary_color'),
-        secondary_color=data.get('secondary_color'),
-        upload_image=image_url
-    )
-    try:
-        db.session.add(lost_report)
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': f'Error saving lost report: {e}'}), 500
+        lost_report = LostReport(
+            user_id=current_user.id,
+            item_id=data['item_id'],
+            item_name=data.get('item_name'),
+            date_lost=date_lost,
+            time_lost=time_lost,
+            place_lost=data['place_lost'],
+            contact=data.get('contact'),
+            description=data.get('description'),
+            primary_color=data.get('primary_color'),
+            secondary_color=data.get('secondary_color'),
+            upload_image=image_url
+        )
+        try:
+            db.session.add(lost_report)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': f'Error saving lost report: {e}'}), 500
 
-    return jsonify({'message': 'Lost report submitted successfully'}), 201
+        return jsonify({'message': 'Lost report submitted successfully'}), 201
 
-@bp.route('/found', methods=['POST'])
+    return render_template('lost_report.html')
+
+@bp.route('/found', methods=['GET', 'POST'])
 @login_required
 def report_found_item():
-    data = request.form
-    file = request.files.get('upload_image')
+    if request.method == 'POST':
+        data = request.form
+        file = request.files.get('upload_image')
 
-    try:
-        date_found = datetime.strptime(data['date_found'], '%Y-%m-%d').date()
-        time_found = datetime.strptime(data['time_found'], '%H:%M:%S').time()
-    except ValueError:
-        return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
+        try:
+            date_found = datetime.strptime(data['date_found'], '%Y-%m-%d').date()
+            time_found = datetime.strptime(data['time_found'], '%H:%M:%S').time()
+        except ValueError:
+            return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
 
-    item = Item.query.get(data['item_id'])
-    if not item:
-        return jsonify({'error': 'Item not found.'}), 404
+        item = Item.query.get(data['item_id'])
+        if not item:
+            return jsonify({'error': 'Item not found.'}), 404
 
-    image_url = handle_image_upload(file, data['item_id']) if file else None
+        image_url = handle_image_upload(file, data['item_id']) if file else None
 
-    found_report = FoundReport(
-        user_id=current_user.id,
-        item_id=data['item_id'],
-        item_name=item.name,
-        date_found=date_found,
-        time_found=time_found,
-        description=data.get('description'),
-        primary_color=data.get('primary_color'),
-        secondary_color=data.get('secondary_color'),
-        upload_image=image_url
-    )
-    try:
-        db.session.add(found_report)
-        db.session.commit()
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': f'Error saving found report: {e}'}), 500
+        found_report = FoundReport(
+            user_id=current_user.id,
+            item_id=data['item_id'],
+            item_name=data.get('item_name'),
+            date_found=date_found,
+            time_found=time_found,
+            place_found=data['place_found'],
+            contact=data.get('contact'),
+            description=data.get('description'),
+            primary_color=data.get('primary_color'),
+            secondary_color=data.get('secondary_color'),
+            upload_image=image_url
+        )
+        try:
+            db.session.add(found_report)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': f'Error saving found report: {e}'}), 500
 
-    return jsonify({'message': 'Found report submitted successfully'}), 201
+        return jsonify({'message': 'Found report submitted successfully'}), 201
+
+    return render_template('found_report.html')
 
 @bp.route('/comments/<int:item_id>', methods=['GET'])
 @login_required
@@ -226,39 +235,15 @@ def receive_reward():
 
     return render_template('receive_reward.html')
 
-@bp.route('/rewards_offered', methods=['GET'])
+@bp.route('/list_found_reports', methods=['GET'])
 @login_required
-def rewards_offered():
-    rewards = Reward.query.filter_by(payer_username=current_user.username).all()
-    return render_template('rewards_offered.html', rewards=rewards)
+def list_all_found_reports():
+    found_reports = FoundReport.query.all()
+    return render_template('list_found_reports.html', found_reports=found_reports)
 
-@bp.route('/rewards_received', methods=['GET'])
+@bp.route('/list_lost_reports', methods=['GET'])
 @login_required
-def rewards_received():
-    rewards = Reward.query.filter_by(receiver_username=current_user.username).all()
-    return render_template('rewards_received.html', rewards=rewards)
+def list_all_lost_reports():
+    lost_reports = LostReport.query.all()
+    return render_template('list_lost_reports.html', lost_reports=lost_reports)
 
-
-
-@bp.route('/pay_reward/<int:reward_id>', methods=['POST'])
-@login_required
-def pay_reward(reward_id):
-    reward = Reward.query.get(reward_id)
-    
-    if not reward:
-        return jsonify({'error': 'Reward not found'}), 404
-    
-    if reward.payer_id != current_user.id:
-        return jsonify({'error': 'Unauthorized to pay this reward'}), 403
-    
-    if reward.date_paid:
-        return jsonify({'error': 'Reward already paid'}), 400
-
-    reward.date_paid = date.today()
-    
-    try:
-        db.session.commit()
-        return jsonify({'message': 'Reward paid successfully'}), 200
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': f'Error paying reward: {e}'}), 500

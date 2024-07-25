@@ -5,7 +5,7 @@ class FoundReport(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
-    item_name = db.Column(db.String(150), nullable=True) 
+    item_name = db.Column(db.String(150), nullable=True)
     description = db.Column(db.String(255), nullable=True)
     date_found = db.Column(db.Date, nullable=False)
     time_found = db.Column(db.Time, nullable=False)
@@ -15,9 +15,10 @@ class FoundReport(db.Model):
     upload_image = db.Column(db.String(250), nullable=True)
     contact = db.Column(db.String(255), nullable=True)  # Contact information
 
+    # Relationships
     user = db.relationship('User', back_populates='found_reports')
     item = db.relationship('Item', back_populates='found_reports')
-    claims = db.relationship('Claim', back_populates='found_item')
+    claims = db.relationship('Claim', back_populates='found_report')
 
     @staticmethod
     def get_item_by_id(item_id):

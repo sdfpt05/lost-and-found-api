@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Lost Reports</title>
+</head>
+<body>
+    <h1>All Lost Reports</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>What was lost</th>
+                <th>Description</th>
+                <th>Date Lost</th>
+                <th>Place Lost</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in lost_reports %}
+            <tr>
+                <td>{{ report.item_name }}</td>
+                <td>{{ report.description }}</td>
+                <td>{{ report.date_lost }}</td>
+                <td>{{ report.place_lost }}</td>
+                <td>
+                    <a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}">Provide Comment</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}

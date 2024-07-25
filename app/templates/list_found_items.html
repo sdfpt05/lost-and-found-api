@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Found Reports</title>
+</head>
+<body>
+    <h1>All Found Reports</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>What was found</th>
+                <th>Description</th>
+                <th>Date Found</th>
+                <th>Place Found</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in found_reports %}
+            <tr>
+                <td>{{ report.item_name }}</td>
+                <td>{{ report.description }}</td>
+                <td>{{ report.date_found }}</td>
+                <td>{{ report.place_found }}</td>
+                <td>
+                    <a href="{{ url_for('report.initiate_claim') }}?found_item_id={{ report.id }}">Initiate Claim</a> |
+                    <a href="{{ url_for('report.offer_reward', found_report_id=report.id) }}">Offer Reward</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}

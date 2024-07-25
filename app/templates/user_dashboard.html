@@ -6,15 +6,13 @@
         <h1>Welcome, {{ current_user.username }}!</h1>
         <nav>
             <ul>
-                <li><a href="{{ url_for('report.report_lost_item') }}">Report Lost Item</a></li>
-                <li><a href="{{ url_for('report.report_found_item') }}">Report Found Item</a></li>
-                <li><a href="{{ url_for('report.view_all_reports') }}">View All Reported Items</a></li>
-                <li><a href="{{ url_for('report.initiate_claim') }}">Initiate Claim</a></li>
-                <li><a href="{{ url_for('report.add_comment') }}">Provide Comment</a></li>
-                <li><a href="{{ url_for('report.offer_reward') }}">Offer Reward</a></li>
+                <li><a href="{{ url_for('report.report_lost_item') }}">Submit Lost Item</a></li>
+                <li><a href="{{ url_for('report.report_found_item') }}">Submit Found Item</a></li>
+                <li><a href="{{ url_for('report.list_all_found_reports') }}">Found Reports</a></li>
+                <li><a href="{{ url_for('report.list_all_lost_reports') }}">Lost Reports</a></li>
                 <li><a href="{{ url_for('report.receive_reward') }}">Receive Reward</a></li>
                 <li><a href="{{ url_for('report.pay_reward') }}">Pay Reward</a></li>
-                <li><a href="{{ url_for('report.view_all_rewards') }}">View My Rewards</a></li>
+                <li><a href="{{ url_for('reward.view_my_rewards') }}">View My Rewards</a></li>
             </ul>
         </nav>
     </header>
