@@ -7,6 +7,7 @@ class LostReport(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)
     item_name = db.Column(db.String(150), nullable=True)
+    place_lost = db.Column(db.String(150), nullable=False)
     date_lost = db.Column(db.Date, nullable=False)  
     time_lost = db.Column(db.Time, nullable=False) 
     description = db.Column(db.String(255), nullable=True)

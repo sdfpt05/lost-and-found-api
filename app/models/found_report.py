@@ -11,6 +11,7 @@ class FoundReport(db.Model):
     time_found = db.Column(db.Time, nullable=False)
     primary_color = db.Column(db.String(50), nullable=True)
     secondary_color = db.Column(db.String(50), nullable=True)
+    place_found = db.Column(db.String(255), nullable=False)
     upload_image = db.Column(db.String(250), nullable=True)
 
 
