@@ -10,15 +10,14 @@ class LostReport(db.Model):
     place_lost = db.Column(db.String(150), nullable=False)
     date_lost = db.Column(db.Date, nullable=False)  
     time_lost = db.Column(db.Time, nullable=False) 
+    contact = db.Column(db.String(255), nullable=True)  
     description = db.Column(db.String(255), nullable=True)
     primary_color = db.Column(db.String(50), nullable=True)
     secondary_color = db.Column(db.String(50), nullable=True)
     upload_image = db.Column(db.String(250), nullable=True)
 
-    
     user = db.relationship('User', back_populates='lost_reports')
     item = db.relationship('Item', back_populates='lost_reports')
-
 
     @staticmethod
     def get_item_by_id(item_id):

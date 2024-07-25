@@ -13,7 +13,7 @@ class FoundReport(db.Model):
     secondary_color = db.Column(db.String(50), nullable=True)
     place_found = db.Column(db.String(255), nullable=False)
     upload_image = db.Column(db.String(250), nullable=True)
-
+    contact = db.Column(db.String(255), nullable=True)  # Contact information
 
     user = db.relationship('User', back_populates='found_reports')
     item = db.relationship('Item', back_populates='found_reports')
