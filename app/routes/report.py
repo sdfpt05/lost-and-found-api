@@ -146,21 +146,22 @@ def provide_comment(item_id):
 
     return render_template('add_comment.html', item_id=item_id)
 
-@bp.route('/initiate_claim', methods=['GET', 'POST'])
+@bp.route('/initiate_claim/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
-def initiate_claim():
+def initiate_claim(found_report_id):
     if request.method == 'POST':
         data = request.form
         claim = Claim(
             user_id=current_user.id,
-            report_id=data['report_id'],
+            found_report_id=found_report_id,  # Update this line
             description=data.get('description')
         )
         db.session.add(claim)
         db.session.commit()
         return jsonify({'message': 'Claim initiated successfully'}), 201
 
-    return render_template('initiate_claim.html')
+    return render_template('initiate_claim.html', found_report_id=found_report_id)
+
 
 @bp.route('/offer_reward/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required

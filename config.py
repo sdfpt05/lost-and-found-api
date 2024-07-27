@@ -20,3 +20,6 @@ class Config:
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') 
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER', 'noreply@gmail.com')  # Replace with your sender email address
 
+    # Uploads folder configuration
+    UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads')
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB limit for file uploads

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1>View Lost Reports</h1>
+</header>
+<main>
+    <table>
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>What was lost</th>
+                <th>Description</th>
+                <th>Date Lost</th>
+                <th>Place Lost</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in lost_reports %}
+            <tr>
+                <td>{{ report.item_id }}</td>
+                <td>{{ report.item_name }}</td>
+                <td>{{ report.description }}</td>
+                <td>{{ report.date_lost }}</td>
+                <td>{{ report.place_lost }}</td>
+                <td>{{ report.contact }}</td>
+                <td>
+                    <a href="{{ url_for('admin.approve_lost_report', report_id=report.id) }}">Approve</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

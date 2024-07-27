@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1>View Found Reports</h1>
+</header>
+<main>
+    <table>
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>What was found</th>
+                <th>Description</th>
+                <th>Date Found</th>
+                <th>Place Found</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in found_reports %}
+            <tr>
+                <td>{{ report.item_id }}</td>
+                <td>{{ report.item_name }}</td>
+                <td>{{ report.description }}</td>
+                <td>{{ report.date_found }}</td>
+                <td>{{ report.place_found }}</td>
+                <td>{{ report.contact}}</td>
+                <td>
+                    <!-- Add actions if any -->
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

@@ -1,22 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
+<header>
     <h1>Offer Reward</h1>
-    <form action="{{ url_for('reward.offer_reward') }}" method="post">
-        <div class="form-group">
+</header>
+<main>
+    <form action="{{ url_for('report.offer_reward', found_report_id=found_report_id) }}" method="post">
+        <div>
             <label for="amount">Amount:</label>
-            <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+            <input type="number" id="amount" name="amount" step="0.01" required>
         </div>
-        <div class="form-group">
+        <div>
             <label for="date_paid">Date Paid:</label>
-            <input type="date" class="form-control" id="date_paid" name="date_paid" required>
+            <input type="date" id="date_paid" name="date_paid" required>
         </div>
-        <div class="form-group">
-            <label for="receiver_id">Receiver ID:</label>
-            <input type="number" class="form-control" id="receiver_id" name="receiver_id" required>
+        <div>
+            <button type="submit">Offer Reward</button>
         </div>
-        <button type="submit" class="btn btn-primary">Offer Reward</button>
     </form>
-</div>
+</main>
 {% endblock %}
+

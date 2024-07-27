@@ -1,22 +1,22 @@
-
 {% extends "base.html" %}
 
 {% block content %}
     <header>
-        <h1>Welcome, {{ current_user.username }}!</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('report.report_lost_item') }}">Submit Lost Item</a></li>
-                <li><a href="{{ url_for('report.report_found_item') }}">Submit Found Item</a></li>
-                <li><a href="{{ url_for('report.list_all_found_reports') }}">Found Reports</a></li>
-                <li><a href="{{ url_for('report.list_all_lost_reports') }}">Lost Reports</a></li>
-                <li><a href="{{ url_for('report.receive_reward') }}">Receive Reward</a></li>
-                <li><a href="{{ url_for('report.pay_reward') }}">Pay Reward</a></li>
-                <li><a href="{{ url_for('report.view_my_rewards') }}">View My Rewards</a></li>
-            </ul>
-        </nav>
+        <h3>Welcome, {{ current_user.username }}!</h3>
     </header>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('report.report_lost_item') }}">Submit Lost Item</a></li>
+            <li><a href="{{ url_for('report.report_found_item') }}">Submit Found Item</a></li>
+            <li><a href="{{ url_for('report.list_all_found_reports') }}">Found Reports</a></li>
+            <li><a href="{{ url_for('report.list_all_lost_reports') }}">Lost Reports</a></li>
+            <li><a href="{{ url_for('report.receive_reward') }}">Receive Reward</a></li>
+            <li><a href="{{ url_for('report.pay_reward') }}">Pay Reward</a></li>
+            <li><a href="{{ url_for('report.view_my_rewards') }}">View My Rewards</a></li>
+        </ul>
+    </nav>
     <main>
         <!-- Content specific to each feature can be included here -->
     </main>
 {% endblock %}
+

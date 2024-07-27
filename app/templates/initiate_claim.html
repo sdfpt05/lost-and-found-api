@@ -1,22 +1,19 @@
 {% extends "base.html" %}
 
-{% extends "base.html" %}
-
 {% block content %}
-    <header>
-        <h1>Initiate Claim</h1>
-    </header>
-    <main>
-        <form action="{{ url_for('report.initiate_claim') }}" method="post">
-            <div class="form-group">
-                <label for="report_id">Report ID:</label>
-                <input type="text" class="form-control" id="report_id" name="report_id" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Description:</label>
-                <textarea class="form-control" id="description" name="description"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Initiate Claim</button>
-        </form>
-    </main>
+<header>
+    <h1>Initiate Claim </h1>
+</header>
+<main>
+    <form action="{{ url_for('admin.initiate_claim', found_report_id=found_report_id) }}" method="post">
+        <div>
+            <label for="description">What proof do you have that this Item is yours?</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div>
+            <button type="submit">Claim</button>
+        </div>
+    </form>
+</main>
 {% endblock %}
+

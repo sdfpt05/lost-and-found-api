@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1>Update Item</h1>
+</header>
+<main>
+    <form action="{{ url_for('admin.update_item', item_id=item.id) }}" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="name">Item Name:</label>
+            <input type="text" id="name" name="name" value="{{ item.name }}" required>
+        </div>
+        <div>
+            <label for="description">Item Description:</label>
+            <textarea id="description" name="description">{{ item.description }}</textarea>
+        </div>
+        <div>
+            <label for="image">Item Image:</label>
+            <input type="file" id="image" name="image">
+            {% if item.image_url %}
+                <p>Current Image: <img src="{{ url_for('static', filename='uploads/' ~ item.image_url) }}" alt="{{ item.name }}" width="100"></p>
+            {% endif %}
+        </div>
+        <div>
+            <button type="submit">Update Item</button>
+        </div>
+    </form>
+</main>
+{% endblock %}

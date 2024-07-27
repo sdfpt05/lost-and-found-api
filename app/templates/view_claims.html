@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1>Claims</h1>
+</header>
+<main>
+    <table>
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Report ID</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for claim in claims %}
+            <tr>
+                <td>{{ claim.user_id }}</td>
+                <td>{{ claim.report_id }}</td>
+                <td>{{ claim.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

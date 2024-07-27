@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header>
+    <h1>View Rewards</h1>
+</header>
+<main>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>User</th>
+                <th>Reward Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reward in rewards %}
+            <tr>
+                <td>{{ reward.item_name }}</td>
+                <td>{{ reward.user_name }}</td>
+                <td>{{ reward.amount }}</td>
+                <td>{{ reward.status }}</td>
+                <td>
+                    <!-- Add actions if any -->
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</main>
+{% endblock %}

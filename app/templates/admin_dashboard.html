@@ -1,62 +1,22 @@
-{% extends 'base.html' %}
-
-{% block title %}Admin Dashboard{% endblock %}
+{% extends "base.html" %}
 
 {% block content %}
-<h2>Admin Dashboard</h2>
-
-<h3>Items</h3>
-<ul>
-    {% for item in items %}
-        <li>{{ item.name }} - {{ item.description }} 
-            <a href="{{ url_for('admin.update_item', item_id=item.id) }}">Edit</a> |
-            <a href="{{ url_for('admin.delete_item', item_id=item.id) }}">Delete</a>
-        </li>
-    {% endfor %}
-</ul>
-
-<h3>Add Item</h3>
-<form action="{{ url_for('admin.add_item') }}" method="post">
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required>
-    <br>
-    <label for="description">Description:</label>
-    <input type="text" id="description" name="description">
-    <br>
-    <label for="image_url">Image URL:</label>
-    <input type="text" id="image_url" name="image_url">
-    <br>
-    <button type="submit">Add Item</button>
-</form>
-
-<h3>Lost Reports</h3>
-<ul>
-    {% for report in lost_reports %}
-        <li>{{ report.description }}
-            <a href="{{ url_for('admin.approve_lost_report', report_id=report.id) }}">Approve</a>
-        </li>
-    {% endfor %}
-</ul>
-
-<h3>Found Reports</h3>
-<ul>
-    {% for report in found_reports %}
-        <li>{{ report.description }}</li>
-    {% endfor %}
-</ul>
-
-<h3>Claims</h3>
-<ul>
-    {% for claim in claims %}
-        <li>{{ claim.description }}</li>
-    {% endfor %}
-</ul>
-
-<h3>Rewards</h3>
-<ul>
-    {% for reward in rewards %}
-        <li>{{ reward.description }}</li>
-    {% endfor %}
-</ul>
+<header>
+    <h1>Admin Dashboard</h1>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('admin.view_lost_reports') }}">Lost Reports</a></li>
+            <li><a href="{{ url_for('admin.view_found_reports') }}">Found Reports</a></li>
+            <li><a href="{{ url_for('admin.view_claims') }}">Claims</a></li>
+            <li><a href="{{ url_for('admin.view_rewards') }}">Rewards</a></li>
+            <li><a href="{{ url_for('admin.add_item') }}">Add Item</a></li>
+            <li><a href="{{ url_for('admin.list_items') }}">Items</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <!-- Include the main content or overview for the admin dashboard here -->
+</main>
 {% endblock %}
+
 
