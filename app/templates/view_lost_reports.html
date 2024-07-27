@@ -2,7 +2,7 @@
 
 {% block content %}
 <header>
-    <h1>View Lost Reports</h1>
+    <h1>Lost Reports</h1>
 </header>
 <main>
     <table>
@@ -27,7 +27,9 @@
                 <td>{{ report.place_lost }}</td>
                 <td>{{ report.contact }}</td>
                 <td>
-                    <a href="{{ url_for('admin.approve_lost_report', report_id=report.id) }}">Approve</a>
+                    <form action="{{ url_for('admin.approve_lost_report', lost_report_id=report.id) }}" method="post">
+                        <button type="submit">Approve</button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}
@@ -35,3 +37,4 @@
     </table>
 </main>
 {% endblock %}
+

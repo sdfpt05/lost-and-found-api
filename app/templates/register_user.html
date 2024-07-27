@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Register</h1>
+    <h1>Sign Up</h1>
     <form method="POST">
         <label for="username">Username:</label>
         <input type="text" name="username" required><br>
@@ -22,7 +22,7 @@
             <option value="admin">Admin</option>
         </select><br>
 
-        <button type="submit">Register</button>
+        <button type="submit">Sign Up</button>
     </form>
 
     {% with messages = get_flashed_messages(with_categories=True) %}

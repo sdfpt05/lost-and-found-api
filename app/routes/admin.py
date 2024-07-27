@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from app.models.item import Item
 from app.models.lost_report import LostReport
@@ -23,11 +23,8 @@ def dashboard():
         rewards = Reward.query.all()
         return render_template('admin_dashboard.html', lost_reports=lost_reports, found_reports=found_reports, claims=claims, rewards=rewards)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-        
-
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
 
 
 @bp.route('/items', methods=['GET', 'POST'])
@@ -37,14 +34,27 @@ def add_item():
     if request.method == 'POST':
         try:
             data = request.form
-            image_url = handle_image_upload(request.files.get('image'), None)  # Upload image if provided
-            item = Item(name=data['name'], description=data.get('description'), image_url=image_url)
+            item_name = data['name']
+            
+            # Check if an item with the same name already exists
+            existing_item = Item.query.filter_by(name=item_name).first()
+            if existing_item:
+                flash('Item with this name already exists', 'error')
+                return redirect(url_for('admin.add_item'))
+            
+            image_url = handle_image_upload(request.files.get('image'), None) 
+            item = Item(name=item_name, description=data.get('description'), image_url=image_url)
             db.session.add(item)
             db.session.commit()
-            return jsonify({'message': 'Item added successfully'}), 201
+            
+            flash('Item added successfully', 'success')
+            return redirect(url_for('admin.list_items'))
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            flash(f'Error: {str(e)}', 'error')
+            return redirect(url_for('admin.add_item'))
+    
     return render_template('add_item.html')
+
 
 @bp.route('/list_items', methods=['GET'])
 @login_required
@@ -54,7 +64,9 @@ def list_items():
         items = Item.query.all()
         return render_template('list_items.html', items=items)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
+
 
 @bp.route('/items/<int:item_id>', methods=['GET', 'POST'])
 @login_required
@@ -65,15 +77,17 @@ def update_item(item_id):
     if request.method == 'POST':
         try:
             data = request.form
-            image_url = handle_image_upload(request.files.get('image'), item_id)  # Update image if provided
+            image_url = handle_image_upload(request.files.get('image'), item_id)  
             item.name = data['name']
             item.description = data.get('description')
             if image_url:
                 item.image_url = image_url
             db.session.commit()
+            flash('Item updated successfully', 'success')
             return redirect(url_for('admin.list_items'))
         except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            flash(f'Error: {str(e)}', 'error')
+            return redirect(url_for('admin.update_item', item_id=item_id))
     
     return render_template('update_item.html', item=item)
 
@@ -86,10 +100,11 @@ def delete_item(item_id):
         item = Item.query.get_or_404(item_id)
         db.session.delete(item)
         db.session.commit()
+        flash('Item deleted successfully', 'success')
         return jsonify({'message': 'Item deleted successfully'}), 200
     except Exception as e:
+        flash(f'Error: {str(e)}', 'error')
         return jsonify({'error': str(e)}), 500
-
 
 
 @bp.route('/reports/lost', methods=['GET'])
@@ -100,7 +115,9 @@ def view_lost_reports():
         lost_reports = LostReport.query.all()
         return render_template('view_lost_reports.html', lost_reports=lost_reports)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
+
 
 @bp.route('/reports/found', methods=['GET'])
 @login_required
@@ -110,7 +127,9 @@ def view_found_reports():
         found_reports = FoundReport.query.all()
         return render_template('view_found_reports.html', found_reports=found_reports)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
+
 
 @bp.route('/claims', methods=['GET'])
 @login_required
@@ -120,7 +139,9 @@ def view_claims():
         claims = Claim.query.all()
         return render_template('view_claims.html', claims=claims)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
+
 
 @bp.route('/rewards', methods=['GET'])
 @login_required
@@ -130,16 +151,20 @@ def view_rewards():
         rewards = Reward.query.all()
         return render_template('view_rewards.html', rewards=rewards)
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
 
-@bp.route('/reports/lost/<int:report_id>/approve', methods=['POST'])
+
+@bp.route('/reports/lost/<int:lost_report_id>/approve', methods=['POST'])
 @login_required
 @admin_required
-def approve_lost_report(report_id):
+def approve_lost_report(lost_report_id):
     try:
-        report = LostReport.query.get_or_404(report_id)
+        report = LostReport.query.get_or_404(lost_report_id)
         report.approved = True
         db.session.commit()
+        flash('Lost report approved successfully', 'success')
         return redirect(url_for('admin.view_lost_reports'))
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('admin.view_lost_reports'))

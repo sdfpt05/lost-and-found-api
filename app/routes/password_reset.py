@@ -22,7 +22,7 @@ def request_password_reset():
             mail.send(msg)
 
             flash('If the email is registered, you will receive a password reset link.')
-            return redirect(url_for('auth.login_user'))
+            return redirect(url_for('auth.login'))
 
     return render_template('password_reset_request.html')
 
@@ -31,7 +31,7 @@ def reset_password(token):
     token_entry = PasswordResetToken.query.filter_by(token=token).first()
     if not token_entry or token_entry.is_expired():
         flash('Invalid or expired token.')
-        return redirect(url_for('auth.login_user'))
+        return redirect(url_for('auth.login'))
 
     if request.method == 'POST':
         new_password = request.form['password']
@@ -47,9 +47,9 @@ def reset_password(token):
             db.session.delete(token_entry)
             db.session.commit()
             flash('Password has been reset successfully!')
-            return redirect(url_for('auth.login_user'))
+            return redirect(url_for('auth.login'))
         else:
             flash('User not found.')
-            return redirect(url_for('auth.login_user'))
+            return redirect(url_for('auth.login'))
 
     return render_template('password_reset_confirm.html', token=token)

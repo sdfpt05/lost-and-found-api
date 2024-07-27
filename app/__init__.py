@@ -1,14 +1,15 @@
 import os
 import secrets
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
 from .extensions import db, migrate, bcrypt, login_manager, mail
 from .models import user, item, lost_report, found_report, claim, reward, comment, password_reset
 from dotenv import load_dotenv
-from flask_wtf.csrf import CSRFProtect
 
 login_manager = LoginManager()
+#csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__)
@@ -25,6 +26,15 @@ def create_app():
     register_blueprints(app)
     configure_cors(app)
 
+    @app.before_request
+    def method_override():
+        if request.method == 'POST':
+            method = request.form.get('_method')
+            if method:
+                method = method.upper()
+                if method in ['PUT', 'DELETE']:
+                    request.environ['REQUEST_METHOD'] = method 
+
     return app
 
 def register_extensions(app):
@@ -33,6 +43,7 @@ def register_extensions(app):
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    #csrf.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):

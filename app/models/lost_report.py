@@ -15,6 +15,7 @@ class LostReport(db.Model):
     primary_color = db.Column(db.String(50), nullable=True)
     secondary_color = db.Column(db.String(50), nullable=True)
     upload_image = db.Column(db.String(250), nullable=True)
+    approved = db.Column(db.Boolean, default=False, nullable=False)
 
     user = db.relationship('User', back_populates='lost_reports')
     item = db.relationship('Item', back_populates='lost_reports')

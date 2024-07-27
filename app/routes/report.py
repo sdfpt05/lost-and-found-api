@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, url_for
+from flask import Blueprint, request, jsonify, render_template, url_for, redirect, flash
 from flask_login import login_required, current_user
 from app.models.lost_report import LostReport
 from app.models.found_report import FoundReport
@@ -50,11 +50,13 @@ def report_lost_item():
             date_lost = datetime.strptime(data['date_lost'], '%Y-%m-%d').date()
             time_lost = datetime.strptime(data['time_lost'], '%H:%M:%S').time()
         except ValueError:
-            return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
+            flash('Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.', 'error')
+            return redirect(url_for('report.report_lost_item'))
 
         item = Item.query.get(data['item_id'])
         if not item:
-            return jsonify({'error': 'Item not found.'}), 404
+            flash('Item not found.', 'error')
+            return redirect(url_for('report.report_lost_item'))
 
         image_url = handle_image_upload(file, data['item_id']) if file else None
 
@@ -74,11 +76,12 @@ def report_lost_item():
         try:
             db.session.add(lost_report)
             db.session.commit()
+            flash('Lost report submitted successfully', 'success')
+            return redirect(url_for('report.report_lost_item'))
         except Exception as e:
             db.session.rollback()
-            return jsonify({'error': f'Error saving lost report: {e}'}), 500
-
-        return jsonify({'message': 'Lost report submitted successfully'}), 201
+            flash(f'Error saving lost report: {e}', 'error')
+            return redirect(url_for('report.report_lost_item'))
 
     return render_template('lost_report.html')
 
@@ -93,11 +96,13 @@ def report_found_item():
             date_found = datetime.strptime(data['date_found'], '%Y-%m-%d').date()
             time_found = datetime.strptime(data['time_found'], '%H:%M:%S').time()
         except ValueError:
-            return jsonify({'error': 'Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.'}), 400
+            flash('Invalid date or time format. Use YYYY-MM-DD and HH:MM:SS.', 'error')
+            return redirect(url_for('report.report_found_item'))
 
         item = Item.query.get(data['item_id'])
         if not item:
-            return jsonify({'error': 'Item not found.'}), 404
+            flash('Item not found.', 'error')
+            return redirect(url_for('report.report_found_item'))
 
         image_url = handle_image_upload(file, data['item_id']) if file else None
 
@@ -117,11 +122,12 @@ def report_found_item():
         try:
             db.session.add(found_report)
             db.session.commit()
+            flash('Found report submitted successfully', 'success')
+            return redirect(url_for('report.report_found_item'))
         except Exception as e:
             db.session.rollback()
-            return jsonify({'error': f'Error saving found report: {e}'}), 500
-
-        return jsonify({'message': 'Found report submitted successfully'}), 201
+            flash(f'Error saving found report: {e}', 'error')
+            return redirect(url_for('report.report_found_item'))
 
     return render_template('found_report.html')
 
@@ -137,12 +143,14 @@ def provide_comment(item_id):
     if request.method == 'POST':
         content = request.form.get('content')
         if not content:
-            return jsonify({'error': 'Content is required'}), 400
+            flash('Content is required', 'error')
+            return redirect(url_for('report.provide_comment', item_id=item_id))
 
         comment = Comment(user_id=current_user.id, item_id=item_id, content=content)
         db.session.add(comment)
         db.session.commit()
-        return jsonify({'message': 'Comment added successfully'}), 201
+        flash('Comment added successfully', 'success')
+        return redirect(url_for('report.provide_comment', item_id=item_id))
 
     return render_template('add_comment.html', item_id=item_id)
 
@@ -153,15 +161,20 @@ def initiate_claim(found_report_id):
         data = request.form
         claim = Claim(
             user_id=current_user.id,
-            found_report_id=found_report_id,  # Update this line
+            found_report_id=found_report_id,
             description=data.get('description')
         )
-        db.session.add(claim)
-        db.session.commit()
-        return jsonify({'message': 'Claim initiated successfully'}), 201
+        try:
+            db.session.add(claim)
+            db.session.commit()
+            flash('Claim initiated successfully', 'success')
+            return redirect(url_for('report.initiate_claim', found_report_id=found_report_id))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error initiating claim: {e}', 'error')
+            return redirect(url_for('report.initiate_claim', found_report_id=found_report_id))
 
     return render_template('initiate_claim.html', found_report_id=found_report_id)
-
 
 @bp.route('/offer_reward/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
@@ -173,11 +186,13 @@ def offer_reward(found_report_id):
             date_paid = datetime.strptime(data['date_paid'], '%Y-%m-%d').date()
 
             if amount <= 0:
-                return jsonify({'error': 'Reward amount must be positive.'}), 400
+                flash('Reward amount must be positive.', 'error')
+                return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
 
             found_report = FoundReport.query.get(found_report_id)
             if not found_report:
-                return jsonify({'error': 'Found report not found.'}), 404
+                flash('Found report not found.', 'error')
+                return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
 
             receiver = found_report.user
 
@@ -191,12 +206,14 @@ def offer_reward(found_report_id):
             )
             db.session.add(reward)
             db.session.commit()
-            return jsonify({'message': 'Reward offered successfully'}), 201
-
+            flash('Reward offered successfully', 'success')
+            return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
         except ValueError:
-            return jsonify({'error': 'Invalid data format. Ensure all fields are correct.'}), 400
+            flash('Invalid data format. Ensure all fields are correct.', 'error')
+            return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
         except KeyError as e:
-            return jsonify({'error': f'Missing field: {str(e)}'}), 400
+            flash(f'Missing field: {str(e)}', 'error')
+            return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
 
     return render_template('offer_reward.html', found_report_id=found_report_id)
 
@@ -211,11 +228,13 @@ def receive_reward():
             payer_username = data['payer_username']
             
             if amount <= 0:
-                return jsonify({'error': 'Reward amount must be positive.'}), 400
+                flash('Reward amount must be positive.', 'error')
+                return redirect(url_for('report.receive_reward'))
             
             payer = User.query.filter_by(username=payer_username).first()
             if not payer:
-                return jsonify({'error': 'Payer not found.'}), 404
+                flash('Payer not found.', 'error')
+                return redirect(url_for('report.receive_reward'))
             
             reward = Reward(
                 amount=amount,
@@ -227,12 +246,14 @@ def receive_reward():
             )
             db.session.add(reward)
             db.session.commit()
-            return jsonify({'message': 'Reward received successfully'}), 201
-
+            flash('Reward received successfully', 'success')
+            return redirect(url_for('report.receive_reward'))
         except ValueError:
-            return jsonify({'error': 'Invalid data format. Ensure all fields are correct.'}), 400
+            flash('Invalid data format. Ensure all fields are correct.', 'error')
+            return redirect(url_for('report.receive_reward'))
         except KeyError as e:
-            return jsonify({'error': f'Missing field: {str(e)}'}), 400
+            flash(f'Missing field: {str(e)}', 'error')
+            return redirect(url_for('report.receive_reward'))
 
     return render_template('receive_reward.html')
 
@@ -259,11 +280,13 @@ def pay_reward():
             receiver_username = data['receiver_username']
             
             if amount <= 0:
-                return jsonify({'error': 'Reward amount must be positive.'}), 400
+                flash('Reward amount must be positive.', 'error')
+                return redirect(url_for('report.pay_reward'))
             
             receiver = User.query.filter_by(username=receiver_username).first()
             if not receiver:
-                return jsonify({'error': 'Receiver not found.'}), 404
+                flash('Receiver not found.', 'error')
+                return redirect(url_for('report.pay_reward'))
             
             reward = Reward(
                 amount=amount,
@@ -275,12 +298,14 @@ def pay_reward():
             )
             db.session.add(reward)
             db.session.commit()
-            return jsonify({'message': 'Reward paid successfully'}), 201
-
+            flash('Reward paid successfully', 'success')
+            return redirect(url_for('report.pay_reward'))
         except ValueError:
-            return jsonify({'error': 'Invalid data format. Ensure all fields are correct.'}), 400
+            flash('Invalid data format. Ensure all fields are correct.', 'error')
+            return redirect(url_for('report.pay_reward'))
         except KeyError as e:
-            return jsonify({'error': f'Missing field: {str(e)}'}), 400
+            flash(f'Missing field: {str(e)}', 'error')
+            return redirect(url_for('report.pay_reward'))
 
     return render_template('pay_reward.html')
 
@@ -290,3 +315,4 @@ def view_my_rewards():
     rewards_received = Reward.query.filter_by(receiver_id=current_user.id).all()
     rewards_paid = Reward.query.filter_by(payer_id=current_user.id).all()
     return render_template('view_my_rewards.html', rewards_received=rewards_received, rewards_paid=rewards_paid)
+
