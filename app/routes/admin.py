@@ -98,7 +98,7 @@ def delete_item(item_id):
 def view_lost_reports():
     try:
         lost_reports = LostReport.query.all()
-        return render_template('list_lost_reports.html', lost_reports=lost_reports)
+        return render_template('view_lost_reports.html', lost_reports=lost_reports)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -108,7 +108,7 @@ def view_lost_reports():
 def view_found_reports():
     try:
         found_reports = FoundReport.query.all()
-        return render_template('list_found_reports.html', found_reports=found_reports)
+        return render_template('view_found_reports.html', found_reports=found_reports)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -118,7 +118,7 @@ def view_found_reports():
 def view_claims():
     try:
         claims = Claim.query.all()
-        return render_template('list_claims.html', claims=claims)
+        return render_template('view_claims.html', claims=claims)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -128,7 +128,7 @@ def view_claims():
 def view_rewards():
     try:
         rewards = Reward.query.all()
-        return render_template('list_rewards.html', rewards=rewards)
+        return render_template('view_rewards.html', rewards=rewards)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

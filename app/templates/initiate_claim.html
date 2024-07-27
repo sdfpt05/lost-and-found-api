@@ -5,10 +5,10 @@
     <h1>Initiate Claim </h1>
 </header>
 <main>
-    <form action="{{ url_for('admin.initiate_claim', found_report_id=found_report_id) }}" method="post">
-        <div>
+    <form action="{{ url_for('report.initiate_claim', found_report_id=found_report_id) }}" method="post">
+        <div class="form-group">
             <label for="description">What proof do you have that this Item is yours?</label>
-            <textarea id="description" name="description" required></textarea>
+            <textarea class="form-control" id="description" name="description" required></textarea>
         </div>
         <div>
             <button type="submit">Claim</button>
