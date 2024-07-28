@@ -19,6 +19,7 @@ class FoundReport(db.Model):
     user = db.relationship('User', back_populates='found_reports')
     item = db.relationship('Item', back_populates='found_reports')
     claims = db.relationship('Claim', back_populates='found_report')
+    rewards = db.relationship('Reward', back_populates='found_report')  # New relationship
 
     @staticmethod
     def get_item_by_id(item_id):

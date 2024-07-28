@@ -183,7 +183,6 @@ def offer_reward(found_report_id):
         data = request.form
         try:
             amount = float(data['amount'])
-            date_paid = datetime.strptime(data['date_paid'], '%Y-%m-%d').date()
 
             if amount <= 0:
                 flash('Reward amount must be positive.', 'error')
@@ -198,11 +197,11 @@ def offer_reward(found_report_id):
 
             reward = Reward(
                 amount=amount,
-                date_paid=date_paid,
                 receiver_id=receiver.id,
                 receiver_username=receiver.username,
                 payer_username=current_user.username,
-                payer_id=current_user.id
+                payer_id=current_user.id,
+                found_report_id=found_report_id
             )
             db.session.add(reward)
             db.session.commit()
@@ -269,45 +268,40 @@ def list_all_lost_reports():
     lost_reports = LostReport.query.all()
     return render_template('list_lost_reports.html', lost_reports=lost_reports)
 
-@bp.route('/pay_reward', methods=['GET', 'POST'])
+@bp.route('/pay_reward/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
-def pay_reward():
+def pay_reward(found_report_id):
+    found_report = FoundReport.query.get_or_404(found_report_id)
+
+    reward = Reward.query.filter_by(found_report_id=found_report_id).first()
+    if not reward:
+        flash('No reward offered for this found report. Please offer a reward first.', 'error')
+        return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
+
     if request.method == 'POST':
         data = request.form
         try:
             amount = float(data['amount'])
             date_paid = datetime.strptime(data['date_paid'], '%Y-%m-%d').date()
-            receiver_username = data['receiver_username']
-            
+
             if amount <= 0:
                 flash('Reward amount must be positive.', 'error')
-                return redirect(url_for('report.pay_reward'))
-            
-            receiver = User.query.filter_by(username=receiver_username).first()
-            if not receiver:
-                flash('Receiver not found.', 'error')
-                return redirect(url_for('report.pay_reward'))
-            
-            reward = Reward(
-                amount=amount,
-                date_paid=date_paid,
-                receiver_id=receiver.id,
-                receiver_username=receiver.username,
-                payer_username=current_user.username,
-                payer_id=current_user.id
-            )
-            db.session.add(reward)
+                return redirect(url_for('report.pay_reward', found_report_id=found_report_id))
+
+            reward.amount = amount
+            reward.date_paid = date_paid
             db.session.commit()
             flash('Reward paid successfully', 'success')
-            return redirect(url_for('report.pay_reward'))
+            return redirect(url_for('report.pay_reward', found_report_id=found_report_id))
         except ValueError:
             flash('Invalid data format. Ensure all fields are correct.', 'error')
-            return redirect(url_for('report.pay_reward'))
+            return redirect(url_for('report.pay_reward', found_report_id=found_report_id))
         except KeyError as e:
             flash(f'Missing field: {str(e)}', 'error')
-            return redirect(url_for('report.pay_reward'))
+            return redirect(url_for('report.pay_reward', found_report_id=found_report_id))
 
-    return render_template('pay_reward.html')
+    return render_template('pay_reward.html', found_report=found_report)
+
 
 @bp.route('/my_rewards', methods=['GET'])
 @login_required

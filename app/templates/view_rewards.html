@@ -8,23 +8,25 @@
     <table>
         <thead>
             <tr>
-                <th>Item</th>
-                <th>User</th>
+                <th>Payer ID</th>
+                <th>Payer Username</th>
                 <th>Reward Amount</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>Date Paid</th>
+                <th>Receiver ID</th>
+                <th>Receiver username</th>
             </tr>
         </thead>
         <tbody>
             {% for reward in rewards %}
             <tr>
-                <td>{{ reward.item_name }}</td>
-                <td>{{ reward.user_name }}</td>
+                <td>{{ reward.payer_id}}</td>
+                <td>{{ reward.payer_username}}</td>
                 <td>{{ reward.amount }}</td>
-                <td>{{ reward.status }}</td>
-                <td>
-                    <!-- Add actions if any -->
-                </td>
+                <td>{{ reward.date_offered }}</td>
+                <td>{{ reward.date_paid}}</td>
+                <td>{{ reward.receiver_id}}</td>
+                <td>{{ reward.receiver_username}}</td>
+
             </tr>
             {% endfor %}
         </tbody>
