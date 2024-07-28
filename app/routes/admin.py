@@ -161,6 +161,10 @@ def view_rewards():
 def approve_lost_report(lost_report_id):
     try:
         report = LostReport.query.get_or_404(lost_report_id)
+        if report.approved:
+            flash('Lost report already approved', 'error')
+            return redirect(url_for('admin.view_lost_reports'))
+        
         report.approved = True
         db.session.commit()
         flash('Lost report approved successfully', 'success')
@@ -168,3 +172,4 @@ def approve_lost_report(lost_report_id):
     except Exception as e:
         flash(f'Error: {str(e)}', 'error')
         return redirect(url_for('admin.view_lost_reports'))
+
