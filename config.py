@@ -1,8 +1,8 @@
 import os
 
 class Config:
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'postgresql://dinah_5:946Vp9ukptGKnMUiOOg3SVsNOHxPMPjD@dpg-cqilr6mehbks73c0996g-a.oregon-postgres.render.com/lost_and_found_x71k')
-    #SQLALCHEMY_DATABASE_URI = 'sqlite:///lost_and_found.db'
+    #SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'postgresql://dinah_5:946Vp9ukptGKnMUiOOg3SVsNOHxPMPjD@dpg-cqilr6mehbks73c0996g-a.oregon-postgres.render.com/lost_and_found_x71k')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///lost_and_found.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get('FLASK_SECRET_KEY') or 'you-will-never-guess'
     SESSION_TYPE = 'filesystem'
