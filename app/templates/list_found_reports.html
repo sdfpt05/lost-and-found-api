@@ -21,7 +21,7 @@
                 <td>{{ report.date_found.strftime('%Y-%m-%d') }}</td>
                 <td>{{ report.place_found }}</td>
                 <td>
-                    <a href="{{ url_for('report.initiate_claim', found_report_id=report.id) }}" class="btn">Initiate Claim</a> |
+                    <a href="{{ url_for('report.initiate_claim', found_report_id=report.id) }}" class="btn">Claim</a> |
                     <a href="{{ url_for('report.offer_reward', found_report_id=report.id) }}" class="btn">Offer Reward</a>
                     <a href="{{ url_for('report.pay_reward', found_report_id=report.id) }}"class="btn">Pay Reward</a>
                 </td>

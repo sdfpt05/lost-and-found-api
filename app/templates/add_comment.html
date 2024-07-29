@@ -1,16 +1,55 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-    <header>
-        <h1>Provide Comment for Item {{ item_id }}</h1>
-    </header>
-    <main>
-        <form action="{{ url_for('report.provide_comment', item_id=item_id) }}" method="post">
-            <div class="form-group">
-                <label for="content">Comment:</label>
-                <textarea class="form-control" id="content" name="content" required></textarea>
+<main>
+    <h1>Comment</h1>
+    <form action="{{ url_for('report.provide_comment', item_id=item_id) }}" method="post">
+        <div class="form-group">
+            <label for="content">Comment:</label>
+            <textarea id="content" name="content" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn">Submit</button>
+    </form>
+
+    <section class="comments-section">
+        <h2>Comments</h2>
+        {% for comment in comments %}
+            <div class="comment">
+                <div class="comment-header">
+                    <span class="comment-username">{{ comment.user.username }}</span>
+                    <span class="comment-timestamp">{{ comment.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                </div>
+                <div class="comment-content">
+                    {{ comment.content }}
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Comment</button>
-        </form>
-    </main>
+        {% else %}
+            <p>No comments yet. Be the first to comment!</p>
+        {% endfor %}
+    </section>
+</main>
+
+<style>
+    .comments-section {
+        margin-top: 20px;
+    }
+    .comment {
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+    }
+    .comment-header {
+        font-size: 0.9em;
+        color: #777;
+    }
+    .comment-username {
+        font-weight: bold;
+    }
+    .comment-timestamp {
+        float: right;
+    }
+    .comment-content {
+        margin-top: 5px;
+    }
+</style>
 {% endblock %}
+

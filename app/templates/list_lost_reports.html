@@ -21,7 +21,7 @@
                 <td>{{ report.date_lost.strftime('%Y-%m-%d') }}</td>
                 <td>{{ report.place_lost }}</td>
                 <td>
-                    <a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}" class="btn">Provide Comment</a>
+                    <a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}" class="btn">Comment</a>
                 </td>
             </tr>
             {% endfor %}

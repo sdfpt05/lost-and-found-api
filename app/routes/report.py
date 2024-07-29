@@ -135,7 +135,13 @@ def report_found_item():
 @login_required
 def get_comments(item_id):
     comments = Comment.query.filter_by(item_id=item_id).all()
-    return jsonify([comment.to_dict() for comment in comments]), 200
+    return jsonify([{
+        'user_id': comment.user_id,
+        'username': comment.user.username,
+        'content': comment.content,
+        'timestamp': comment.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+    } for comment in comments])
+
 
 @bp.route('/comments/provide/<int:item_id>', methods=['GET', 'POST'])
 @login_required
@@ -152,7 +158,8 @@ def provide_comment(item_id):
         flash('Comment added successfully', 'success')
         return redirect(url_for('report.provide_comment', item_id=item_id))
 
-    return render_template('add_comment.html', item_id=item_id)
+    comments = Comment.query.filter_by(item_id=item_id).all()
+    return render_template('add_comment.html', item_id=item_id, comments=comments)
 
 @bp.route('/initiate_claim/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
