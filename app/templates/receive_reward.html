@@ -20,3 +20,32 @@
     </form>
 </div>
 {% endblock %}
+
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<main>
+    <h1>Receive Reward</h1>
+    <form action="{{ url_for('report.receive_reward', found_report_id=found_report_id) }}" method="post">
+        <div class="form-group">
+            <label for="amount">Reward Amount:</label>
+            <input type="text" id="amount" name="amount" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="date_paid">Date Paid (YYYY-MM-DD):</label>
+            <input type="text" id="date_paid" name="date_paid" class="form-control" placeholder="2024-07-02" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="payer_username">Payer Username:</label>
+            <input type="text" id="payer_username" name="payer_username" class="form-control" required>
+        </div>
+        
+        <button type="submit" class="btn">Receive Reward</button>
+    </form>
+</main>
+{% endblock %}
+

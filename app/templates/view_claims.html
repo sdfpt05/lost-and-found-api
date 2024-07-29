@@ -10,14 +10,14 @@
             <tr>
                 <th>User ID</th>
                 <th>Report ID</th>
-                <th>Description</th>
+                <th>Claim reason</th>
             </tr>
         </thead>
         <tbody>
             {% for claim in claims %}
             <tr>
                 <td>{{ claim.user_id }}</td>
-                <td>{{ claim.report_id }}</td>
+                <td>{{ claim.found_report_id }}</td>
                 <td>{{ claim.description }}</td>
             </tr>
             {% endfor %}

@@ -166,12 +166,15 @@ def provide_comment(item_id):
 def initiate_claim(found_report_id):
     if request.method == 'POST':
         data = request.form
+        found_report = FoundReport.query.get_or_404(found_report_id)
+        item = found_report.item
         claim = Claim(
             user_id=current_user.id,
             found_report_id=found_report_id,
             description=data.get('description')
         )
         try:
+            item.is_claimed = True
             db.session.add(claim)
             db.session.commit()
             flash('Claim initiated successfully', 'success')
@@ -223,9 +226,11 @@ def offer_reward(found_report_id):
 
     return render_template('offer_reward.html', found_report_id=found_report_id)
 
-@bp.route('/receive_reward', methods=['GET', 'POST'])
+@bp.route('/receive_reward/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
-def receive_reward():
+def receive_reward(found_report_id):
+    found_report = FoundReport.query.get_or_404(found_report_id)
+    
     if request.method == 'POST':
         data = request.form
         try:
@@ -235,33 +240,44 @@ def receive_reward():
             
             if amount <= 0:
                 flash('Reward amount must be positive.', 'error')
-                return redirect(url_for('report.receive_reward'))
+                return redirect(url_for('report.receive_reward', found_report_id=found_report_id))
             
             payer = User.query.filter_by(username=payer_username).first()
             if not payer:
                 flash('Payer not found.', 'error')
-                return redirect(url_for('report.receive_reward'))
-            
-            reward = Reward(
-                amount=amount,
-                date_paid=date_paid,
-                receiver_id=current_user.id,
-                receiver_username=current_user.username,
-                payer_username=payer_username,
-                payer_id=payer.id
-            )
-            db.session.add(reward)
+                return redirect(url_for('report.receive_reward', found_report_id=found_report_id))
+
+            reward = Reward.query.filter_by(found_report_id=found_report_id).first()
+            if not reward:
+                flash('No reward offered for this found report.', 'error')
+                return redirect(url_for('report.receive_reward', found_report_id=found_report_id))
+
+            # Ensure that the receiver of the reward is the one who submitted the found report
+            if found_report.user_id != current_user.id:
+                flash('You are not authorized to receive this reward.', 'error')
+                return redirect(url_for('report.receive_reward', found_report_id=found_report_id))
+
+            # Ensure that the reward exists and is still valid
+            if reward.payer_id != payer.id or reward.amount <= 0:
+                flash('Invalid reward or reward has already been processed.', 'error')
+                return redirect(url_for('report.receive_reward', found_report_id=found_report_id))
+
+            reward.amount = amount
+            reward.date_paid = date_paid
+            reward.payer_username = payer_username
+            reward.payer_id = payer.id
             db.session.commit()
             flash('Reward received successfully', 'success')
-            return redirect(url_for('report.receive_reward'))
+            return redirect(url_for('report.receive_reward', found_report_id=found_report_id))
         except ValueError:
             flash('Invalid data format. Ensure all fields are correct.', 'error')
-            return redirect(url_for('report.receive_reward'))
+            return redirect(url_for('report.receive_reward', found_report_id=found_report_id))
         except KeyError as e:
             flash(f'Missing field: {str(e)}', 'error')
-            return redirect(url_for('report.receive_reward'))
+            return redirect(url_for('report.receive_reward', found_report_id=found_report_id))
 
-    return render_template('receive_reward.html')
+    return render_template('receive_reward.html', found_report_id=found_report_id)
+
 
 @bp.route('/list_found_reports', methods=['GET'])
 @login_required
@@ -308,6 +324,32 @@ def pay_reward(found_report_id):
             return redirect(url_for('report.pay_reward', found_report_id=found_report_id))
 
     return render_template('pay_reward.html', found_report=found_report)
+
+@bp.route('/return_item/<int:found_report_id>', methods=['POST'])
+@login_required
+def return_item(found_report_id):
+    found_report = FoundReport.query.get_or_404(found_report_id)
+    item = found_report.item
+    
+    # Check if the current user is the one who submitted the found report
+    if found_report.user_id != current_user.id:
+        flash('You are not authorized to return this item.', 'error')
+        return redirect(url_for('report.list_all_found_reports'))
+    
+    if not item.is_claimed:
+        flash('Item must be claimed before it can be returned.', 'error')
+        return redirect(url_for('report.list_all_found_reports'))
+    
+    try:
+        item.is_returned = True
+        db.session.commit()
+        flash('Item returned successfully', 'success')
+        return redirect(url_for('report.list_all_found_reports'))
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error returning item: {e}', 'error')
+        return redirect(url_for('report.list_all_found_reports'))
+
 
 
 @bp.route('/my_rewards', methods=['GET'])

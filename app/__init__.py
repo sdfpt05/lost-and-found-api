@@ -63,5 +63,5 @@ def register_blueprints(app):
 
 
 def configure_cors(app):
-    CORS(app, supports_credentials=True)
+    CORS(app, send_wildcard=True, allow_headers=["Content-Type", "Authorization"])
 

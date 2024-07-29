@@ -10,7 +10,12 @@
                 <th>Description</th>
                 <th>Date Found</th>
                 <th>Place Found</th>
-                <th>Actions</th>
+                <th>Claim</th>
+                <th>Offer Reward</th>
+                <th>Pay Reward</th>
+                <th>Comment</th>
+
+
             </tr>
         </thead>
         <tbody>
@@ -21,10 +26,11 @@
                 <td>{{ report.date_found.strftime('%Y-%m-%d') }}</td>
                 <td>{{ report.place_found }}</td>
                 <td>
-                    <a href="{{ url_for('report.initiate_claim', found_report_id=report.id) }}" class="btn">Claim</a> |
-                    <a href="{{ url_for('report.offer_reward', found_report_id=report.id) }}" class="btn">Offer Reward</a>
-                    <a href="{{ url_for('report.pay_reward', found_report_id=report.id) }}"class="btn">Pay Reward</a>
+                    <a href="{{ url_for('report.initiate_claim', found_report_id=report.id) }}" class="btn">Claim</a> 
                 </td>
+                <td><a href="{{ url_for('report.offer_reward', found_report_id=report.id) }}" class="btn">Offer Reward</a></td>
+                <td><a href="{{ url_for('report.pay_reward', found_report_id=report.id) }}"class="btn">Pay </a></td>
+                <td></td>
             </tr>
             {% endfor %}
         </tbody>

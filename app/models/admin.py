@@ -10,7 +10,7 @@ class Admin(UserMixin, db.Model):
     zip_code = db.Column(db.String(10), nullable=False)
     email = db.Column(db.String(150), nullable=False, unique=True)
     password_hash = db.Column(db.String(200), nullable=False)
-    users = db.relationship('User', back_populates='admin')  # Relationship
+    users = db.relationship('User', back_populates='admin') 
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)

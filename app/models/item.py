@@ -8,3 +8,5 @@ class Item(db.Model):
     lost_reports = db.relationship('LostReport', back_populates='item', lazy=True)  
     found_reports = db.relationship('FoundReport', back_populates='item', lazy=True)
     comments = db.relationship('Comment', back_populates='item')
+    is_returned = db.Column(db.Boolean, default=False, nullable=False)
+    is_claimed = db.Column(db.Boolean, default=False, nullable=False)

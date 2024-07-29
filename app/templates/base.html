@@ -13,7 +13,7 @@
             padding: 0;
         }
         header {
-            background-color: #2983e4;
+            background-color: #bda9b9;
             color: white;
             padding: 0.7rem;
             text-align: center;
@@ -53,13 +53,13 @@
         form button {
             margin-top: 1rem;
             padding: 0.3rem;
-            background-color: #245891;
+            background-color: #daa0da;
             color: white;
             border: none;
             cursor: pointer;
         }
         form button:hover {
-            background-color: #0056b3;
+            background-color: #45cc6d;
         }
         .flash-messages {
             margin: 1rem 0;
@@ -109,7 +109,7 @@
 </head>
 <body>
     <header>
-        <h2>Lost and Found Inventory Management</h2>
+        <h1>ʟᴏsᴛ ᴀɴᴅ ғᴏᴜɴᴅ ᴀᴘɪ</h1>
         {% if current_user.is_authenticated %}
             <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('auth.logout') }}">Logout</a></p>
         {% else %}

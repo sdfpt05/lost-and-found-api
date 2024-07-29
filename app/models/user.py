@@ -6,7 +6,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(150), nullable=False)
-    role = db.Column(db.String(50), nullable=False, default='user')  # 'user' or 'admin'
+    role = db.Column(db.String(50), nullable=False, default='user')  
     lost_reports = db.relationship('LostReport', back_populates='user', lazy=True)
     found_reports = db.relationship('FoundReport', back_populates='user', lazy=True)
     claims = db.relationship('Claim', back_populates='claim_user', lazy=True)
