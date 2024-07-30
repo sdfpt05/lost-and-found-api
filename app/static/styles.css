@@ -17,7 +17,7 @@ header {
 header h1 {
     margin: 0;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.0rem;
 }
 /* Navigation Styles */
 nav {
@@ -49,7 +49,7 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-    background-color: #ec8dec;
+    background-color: #f1eff1;
     border-radius: 5px;
 }
 
@@ -166,7 +166,7 @@ table th, table td {
 }
 
 table th {
-    background-color: #d6a7d4;
+    background-color: #caa6c8;
     color: #fff;
 }
 

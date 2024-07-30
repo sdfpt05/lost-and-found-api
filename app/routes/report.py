@@ -331,7 +331,7 @@ def return_item(found_report_id):
     found_report = FoundReport.query.get_or_404(found_report_id)
     item = found_report.item
     
-    # Check if the current user is the one who submitted the found report
+    
     if found_report.user_id != current_user.id:
         flash('You are not authorized to return this item.', 'error')
         return redirect(url_for('report.list_all_found_reports'))

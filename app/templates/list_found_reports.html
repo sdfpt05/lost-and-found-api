@@ -1,18 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <main>
     <h1>Found Reports</h1>
     <table>
         <thead>
             <tr>
                 <th>What was found</th>
-                <th>Description</th>
+                <th>Additional Info</th>
                 <th>Date Found</th>
                 <th>Place Found</th>
                 <th>Claim</th>
                 <th>Offer Reward</th>
                 <th>Pay Reward</th>
+                <th>Receive Reward</th>
+                <th>Return Item</th>
                 <th>Comment</th>
 
 
@@ -29,8 +32,10 @@
                     <a href="{{ url_for('report.initiate_claim', found_report_id=report.id) }}" class="btn">Claim</a> 
                 </td>
                 <td><a href="{{ url_for('report.offer_reward', found_report_id=report.id) }}" class="btn">Offer Reward</a></td>
-                <td><a href="{{ url_for('report.pay_reward', found_report_id=report.id) }}"class="btn">Pay </a></td>
-                <td></td>
+                <td><a href="{{ url_for('report.pay_reward', found_report_id=report.id) }}"class="btn">Pay  </a></td>
+                <td><a href="{{ url_for('report.receive_reward', found_report_id=report.id) }}"class="btn">Receive Reward</a></td>
+                <td><a href="{{ url_for('report.return_item', found_report_id=report.id) }}"class="btn">Return</a></td>
+                <td><a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}" class="btn">Comment</a></td>
             </tr>
             {% endfor %}
         </tbody>

@@ -10,3 +10,4 @@ class Item(db.Model):
     comments = db.relationship('Comment', back_populates='item')
     is_returned = db.Column(db.Boolean, default=False, nullable=False)
     is_claimed = db.Column(db.Boolean, default=False, nullable=False)
+    is_recovered = db.Column(db.Boolean, default=False, nullable=False)  
