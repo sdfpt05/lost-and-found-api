@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, url_for, redirect, flash
+from flask import Blueprint, request, jsonify, render_template, url_for, redirect, flash, current_app
 from flask_login import login_required, current_user
 from app.models.lost_report import LostReport
 from app.models.found_report import FoundReport
@@ -17,7 +17,7 @@ bp = Blueprint('report', __name__, url_prefix='/report')
 
 # Helper function to handle image uploads
 def handle_image_upload(file, item_id):
-    UPLOAD_FOLDER = 'static/uploads'
+    UPLOAD_FOLDER = current_app.config['UPLOAD_FOLDER']
     ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 
     def allowed_file(filename):
@@ -77,6 +77,12 @@ def report_lost_item():
             db.session.add(lost_report)
             db.session.commit()
             flash('Lost report submitted successfully', 'success')
+            
+            # Check if a found report exists for the item
+            found_report = FoundReport.query.filter_by(item_id=data['item_id']).first()
+            if found_report:
+                return redirect(url_for('report.list_all_found_reports'))
+            
             return redirect(url_for('report.report_lost_item'))
         except Exception as e:
             db.session.rollback()
