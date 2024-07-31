@@ -173,3 +173,25 @@ def approve_lost_report(lost_report_id):
         flash(f'Error: {str(e)}', 'error')
         return redirect(url_for('admin.view_lost_reports'))
 
+@bp.route('/list_recovered_items', methods=['GET'])
+@login_required
+@admin_required
+def list_recovered_items():
+    try:
+        recovered_items = Item.query.join(FoundReport).filter(FoundReport.item_id == Item.id).all()
+        return render_template('list_recovered_items.html', items=recovered_items)
+    except Exception as e:
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
+
+
+@bp.route('/list_returned_items', methods=['GET'])
+@login_required
+@admin_required
+def list_returned_items():
+    try:
+        returned_items = Item.query.filter_by(is_returned=True).all()
+        return render_template('list_returned_items.html', items=returned_items)
+    except Exception as e:
+        flash(f'Error: {str(e)}', 'error')
+        return redirect(url_for('admin.dashboard'))
