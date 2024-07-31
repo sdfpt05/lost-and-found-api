@@ -2,19 +2,31 @@
 
 {% block content %}
 <header>
-    <h2>Returned Items</h2>
+    <h1>Returned Items</h1>
 </header>
 <main>
-    <div class="card-container">
-        {% for item in items %}
-        <div class="card">
-            <img src="{{ item.image_url }}" alt="{{ item.name }}">
-            <div class="card-content">
-                <h2>{{ item.name }}</h2>
-                <p>{{ item.description }}</p>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Item Name</th>
+                <th>Item Description</th>
+                <th>Returned Status</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.is_returned }}</td>
+                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </main>
 {% endblock %}
+

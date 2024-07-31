@@ -14,16 +14,15 @@ def handle_image_upload(file, item_id):
         filename = secure_filename(file.filename)
         file_path = os.path.join(UPLOAD_FOLDER, filename)
         
-        
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
         
         try:
             file.save(file_path)
-            return url_for('static', filename=f'uploads/{filename}')
+            url = url_for('static', filename=f'uploads/{filename}', _external=False)
+            print(f"Generated URL: {url}")  # Print the URL
+            return url
         except Exception as e:
-            # Log the exception or handle it as needed
             print(f"Error saving file: {e}")
             return None
     
     return None
-

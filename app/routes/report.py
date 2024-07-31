@@ -119,7 +119,9 @@ def report_found_item():
             secondary_color=data.get('secondary_color'),
             upload_image=image_url
         )
+        
         try:
+            item.is_recovered = True  # Set is_recovered attribute to True
             db.session.add(found_report)
             db.session.commit()
             flash('Found report submitted successfully', 'success')
@@ -130,6 +132,7 @@ def report_found_item():
             return redirect(url_for('report.report_found_item'))
 
     return render_template('found_report.html')
+
 
 @bp.route('/comments/<int:item_id>', methods=['GET'])
 @login_required
@@ -164,9 +167,15 @@ def provide_comment(item_id):
 @bp.route('/initiate_claim/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
 def initiate_claim(found_report_id):
+    found_report = FoundReport.query.get_or_404(found_report_id)
+    user_lost_report = LostReport.query.filter_by(user_id=current_user.id, item_id=found_report.item_id).first()
+
+    if not user_lost_report:
+        flash('You need to submit a lost report before claiming an item.', 'error')
+        return redirect(url_for('report.report_lost_item'))
+
     if request.method == 'POST':
         data = request.form
-        found_report = FoundReport.query.get_or_404(found_report_id)
         item = found_report.item
         claim = Claim(
             user_id=current_user.id,
@@ -185,6 +194,7 @@ def initiate_claim(found_report_id):
             return redirect(url_for('report.initiate_claim', found_report_id=found_report_id))
 
     return render_template('initiate_claim.html', found_report_id=found_report_id)
+
 
 @bp.route('/offer_reward/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
