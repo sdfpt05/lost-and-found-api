@@ -1,45 +1,138 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<main>
+<main class="found-reports-container">
+    <a href="{{ url_for('user.dashboard') }}" class="back-button" title="Back to Dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+    </a>
     <h1>Found Reports</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>What was found</th>
-                <th>Additional Info</th>
-                <th>Date Found</th>
-                <th>Place Found</th>
-                <th>Claim</th>
-                <th>Offer Reward</th>
-                <th>Pay Reward</th>
-                <th>Receive Reward</th>
-                <th>Return Item</th>
-                <th>Comment</th>
-
-
-            </tr>
-        </thead>
-        <tbody>
-            {% for report in found_reports %}
-            <tr>
-                <td>{{ report.item_name }}</td>
-                <td>{{ report.description }}</td>
-                <td>{{ report.date_found.strftime('%Y-%m-%d') }}</td>
-                <td>{{ report.place_found }}</td>
-                <td>
-                    <a href="{{ url_for('report.initiate_claim', found_report_id=report.id) }}" class="btn">Claim</a> 
-                </td>
-                <td><a href="{{ url_for('report.offer_reward', found_report_id=report.id) }}" class="btn">Offer Reward</a></td>
-                <td><a href="{{ url_for('report.pay_reward', found_report_id=report.id) }}"class="btn">Pay  </a></td>
-                <td><a href="{{ url_for('report.receive_reward', found_report_id=report.id) }}"class="btn">Receive Reward</a></td>
-                <td><a href="{{ url_for('report.return_item', found_report_id=report.id) }}"class="btn">Return</a></td>
-                <td><a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}" class="btn">Comment</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="found-reports-table">
+            <thead>
+                <tr>
+                    <th>What was found</th>
+                    <th>Additional Info</th>
+                    <th>Date Found</th>
+                    <th>Place Found</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for report in found_reports %}
+                <tr>
+                    <td>{{ report.item_name }}</td>
+                    <td>{{ report.description }}</td>
+                    <td>{{ report.date_found.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ report.place_found }}</td>
+                    <td class="action-buttons">
+                        <a href="{{ url_for('report.initiate_claim', found_report_id=report.id) }}" class="btn">Claim</a>
+                        <a href="{{ url_for('report.offer_reward', found_report_id=report.id) }}" class="btn">Offer Reward</a>
+                        <a href="{{ url_for('report.pay_reward', found_report_id=report.id) }}" class="btn">Pay</a>
+                        <a href="{{ url_for('report.receive_reward', found_report_id=report.id) }}" class="btn">Receive Reward</a>
+                        <a href="{{ url_for('report.return_item', found_report_id=report.id) }}" class="btn">Return</a>
+                        <a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}" class="btn">Comment</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </main>
+
+<style>
+    .found-reports-container {
+        padding: 20px;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .found-reports-container h1 {
+        margin-bottom: 20px;
+    }
+    
+    .back-button {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: #bda9b9;
+        color: white;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+        background-color: #a55ea8;
+    }
+
+    .back-button svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .found-reports-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .found-reports-table th,
+    .found-reports-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .found-reports-table th {
+        background-color: #bda9b9;
+        color: white;
+    }
+
+    .found-reports-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .btn {
+        padding: 5px 10px;
+        background-color: #ba79bd;
+        color: white;
+        text-decoration: none;
+        border-radius: 3px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .btn:hover {
+        background-color: #a55ea8;
+    }
+
+    @media (max-width: 768px) {
+        .found-reports-table {
+            font-size: 12px;
+        }
+
+        .btn {
+            padding: 3px 6px;
+            font-size: 10px;
+        }
+    }
+</style>
 {% endblock %}
 

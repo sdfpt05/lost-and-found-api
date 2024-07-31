@@ -177,7 +177,7 @@ def initiate_claim(found_report_id):
     user_lost_report = LostReport.query.filter_by(user_id=current_user.id, item_id=found_report.item_id).first()
 
     if not user_lost_report:
-        flash('You need to submit a lost report before claiming an item.', 'error')
+        flash('You need to submit a lost report of the item before claiming it.', 'error')
         return redirect(url_for('report.report_lost_item'))
 
     if request.method == 'POST':
@@ -209,6 +209,7 @@ def offer_reward(found_report_id):
         data = request.form
         try:
             amount = float(data['amount'])
+            date_paid = datetime.strptime(data['date_paid'], '%Y-%m-%d').date()
 
             if amount <= 0:
                 flash('Reward amount must be positive.', 'error')
@@ -223,6 +224,7 @@ def offer_reward(found_report_id):
 
             reward = Reward(
                 amount=amount,
+                date_paid=date_paid,
                 receiver_id=receiver.id,
                 receiver_username=receiver.username,
                 payer_username=current_user.username,

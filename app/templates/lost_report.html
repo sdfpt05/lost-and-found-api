@@ -2,30 +2,35 @@
 
 {% block content %}
 <main>
+    <a href="{{ url_for('user.dashboard') }}" class="back-button" title="Back to Dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+    </a>
     <h1>Submit Lost Item</h1>
     <form action="{{ url_for('report.report_lost_item') }}" method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="item_name">What was lost:</label>
+            <label for="item_name">What was lost?</label>
             <input type="text" id="item_name" name="item_name" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label for="item_id">Item ID:</label>
+            <label for="item_id">Item ID</label>
             <input type="text" id="item_id" name="item_id" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label for="date_lost">Date Lost (YYYY-MM-DD):</label>
+            <label for="date_lost">Date Lost (YYYY-MM-DD)</label>
             <input type="text" id="date_lost" name="date_lost" class="form-control" placeholder="2024-07-02" required>
         </div>
 
         <div class="form-group">
-            <label for="time_lost">Time Lost (HH:MM:SS):</label>
+            <label for="time_lost">Time Lost (HH:MM:SS)</label>
             <input type="text" id="time_lost" name="time_lost" class="form-control" placeholder="10:08:00" required>
         </div>
 
         <div class="form-group">
-            <label for="place_lost">Place Lost:</label>
+            <label for="place_lost">Place Lost</label>
             <input type="text" id="place_lost" name="place_lost" class="form-control" required>
         </div>
 
@@ -35,26 +40,75 @@
         </div>
 
         <div class="form-group">
-            <label for="description">Additional Information</label>
+            <label for="description">Additional Information you'd like to share?</label>
             <textarea id="description" name="description" class="form-control"></textarea>
         </div>
 
         <div class="form-group">
-            <label for="primary_color">Primary Color:</label>
+            <label for="primary_color">Primary Color</label>
             <input type="text" id="primary_color" name="primary_color" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="secondary_color">Secondary Color:</label>
+            <label for="secondary_color">Secondary Color</label>
             <input type="text" id="secondary_color" name="secondary_color" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="upload_image">Upload Image:</label>
+            <label for="upload_image">Upload Image of the lost item</label>
             <input type="file" id="upload_image" name="upload_image">
         </div>
 
         <button type="submit" class="btn">Submit Lost Report</button>
     </form>
 </main>
+<style>
+   
+    form {
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f9f9f9; /
+}
+
+.form-group {
+    margin-bottom: 20px;
+    border-radius: 8px; 
+    overflow: hidden; 
+}
+.form-control {
+    width: 100%;
+    border-radius: 8px; /* Increased from 5px for more noticeable rounding */
+    padding: 12px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    color: #333;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+textarea.form-control {
+    height: 120px;
+    resize: vertical;
+}
+.submit-btn {
+    border-radius: 8px;
+    padding: 12px 20px;
+    background-color: #daa0da;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #a55ea8;
+}
+
+</style>
 {% endblock %}

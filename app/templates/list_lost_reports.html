@@ -2,6 +2,11 @@
 
 {% block content %}
 <main>
+    <a href="{{ url_for('user.dashboard') }}" class="back-button" title="Back to Dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+    </a>
     <h1>Lost Reports</h1>
     <table>
         <thead>
@@ -10,6 +15,7 @@
                 <th>Description</th>
                 <th>Date Lost</th>
                 <th>Place Lost</th>
+                <th>Contact</th>
                 <th>Comment</th>
             </tr>
         </thead>
@@ -20,6 +26,7 @@
                 <td>{{ report.description }}</td>
                 <td>{{ report.date_lost.strftime('%Y-%m-%d') }}</td>
                 <td>{{ report.place_lost }}</td>
+                <td>{{ report.contact }}</td>
                 <td>
                     <a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}" class="btn">Comment</a>
                 </td>
@@ -28,4 +35,7 @@
         </tbody>
     </table>
 </main>
+<style>
+    
+</style>
 {% endblock %}

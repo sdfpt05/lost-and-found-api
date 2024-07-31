@@ -2,18 +2,30 @@
 
 {% block content %}
 <header>
+    <a href="{{ url_for('report.list_all_found_reports') }}" class="back-button" title="Back to Found reports">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+    </a>
     <h1>Offer Reward</h1>
 </header>
 <main>
     <form action="{{ url_for('report.offer_reward', found_report_id=found_report_id) }}" method="post">
-        <div>
+        <div class="form-group">
             <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" step="0.01" required>
+            <input type="number" id="amount" name="amount" step="0.01" >
+        </div>
+        <div class="form-group">
+            <label for="date_paid">Date to be paid(YYYY-MM-DD):</label>
+            <input type="text" id="date_paid" name="date_paid" class="form-control" placeholder="2024-07-02" required>
         </div>
         <div>
             <button type="submit">Offer Reward</button>
         </div>
     </form>
 </main>
+<style>
+
+</style>
 {% endblock %}
 

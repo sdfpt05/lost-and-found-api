@@ -6,6 +6,30 @@ body {
     background-color: #f9f9f9;
     color: #333;
 }
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #bda9b9;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #a55ea8;
+}
+
+.back-button svg {
+    width: 20px;
+    height: 20px;
+}
 
 header {
     background-color: #e7cbe1;
@@ -62,6 +86,7 @@ main {
 /* Form Styles */
 .form-group {
     margin-bottom: 20px;
+    border-radius: 10px;
 }
 
 .form-group label {
@@ -74,6 +99,7 @@ main {
 
 .form-control {
     width: 100%;
+    border-radius: 5px;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -111,7 +137,7 @@ textarea.form-control {
 }
 
 .btn:hover {
-    background-color: #f1ebf0;
+    background-color: #a55ea8;
 }
 
 .btn:active {
@@ -218,7 +244,7 @@ table td a:hover {
     background-color: #bd8bb2; 
     color: white;
     border: none;
-    border-radius: 5px; /* Rounded edges */
+    border-radius: 5px; 
     padding: 10px 15px;
     text-decoration: none;
     display: inline-block;
@@ -277,6 +303,6 @@ button {
 }
 
 button:hover {
-    background-color: #ddd;
+    background-color: #a55ea8;
 }
 
