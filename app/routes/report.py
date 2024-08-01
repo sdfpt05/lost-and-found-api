@@ -12,8 +12,11 @@ from app.models.reward import Reward
 from app.models.user import User
 from datetime import date
 import os
+from flask_babel import Babel, gettext as _
 
 bp = Blueprint('report', __name__, url_prefix='/report')
+
+
 
 # Helper function to handle image uploads
 def handle_image_upload(file, item_id):
@@ -38,6 +41,11 @@ def handle_image_upload(file, item_id):
     else:
         print("Invalid file or file type not allowed.")
         return None
+    
+
+
+
+
 
 @bp.route('/lost', methods=['GET', 'POST'])
 @login_required
@@ -299,14 +307,34 @@ def receive_reward(found_report_id):
 @bp.route('/list_found_reports', methods=['GET'])
 @login_required
 def list_all_found_reports():
-    found_reports = FoundReport.query.all()
-    return render_template('list_found_reports.html', found_reports=found_reports)
+    try:  
+        
+        page = request.args.get('page', 1, type=int)  
+        per_page = 4  
+ 
+        found_reports_paginated = FoundReport.query.paginate(page=page, per_page=per_page)  
+          
+        return render_template('list_found_reports.html', found_reports=found_reports_paginated)  
+    except Exception as e:  
+        flash(f'Error: {str(e)}', 'error')  
+        return redirect(url_for('user.dashboard'))
 
 @bp.route('/list_lost_reports', methods=['GET'])
 @login_required
 def list_all_lost_reports():
-    lost_reports = LostReport.query.all()
-    return render_template('list_lost_reports.html', lost_reports=lost_reports)
+    try:  
+        # Get the page number from the query string; default is 1  
+        page = request.args.get('page', 1, type=int)  
+        per_page = 2  # Number of reports per page  
+
+        # Query the LostReport and paginate  
+        lost_reports_paginated = LostReport.query.paginate(page=page, per_page=per_page)  
+        
+        # Pass the pagination object to the template  
+        return render_template('list_lost_reports.html', lost_reports=lost_reports_paginated)  
+    except Exception as e:  
+        flash(f'Error: {str(e)}', 'error')  
+        return redirect(url_for('user.dashboard')) 
 
 @bp.route('/pay_reward/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
@@ -350,30 +378,44 @@ def pay_reward(found_report_id):
     return render_template('pay_reward.html', found_report=found_report)
 
 
-@bp.route('/return_item/<int:found_report_id>', methods=['POST'])
+@bp.route('/return_item/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
 def return_item(found_report_id):
     found_report = FoundReport.query.get_or_404(found_report_id)
     item = found_report.item
     
-    
-    if found_report.user_id != current_user.id:
-        flash('You are not authorized to return this item.', 'error')
-        return redirect(url_for('report.list_all_found_reports'))
-    
-    if not item.is_claimed:
-        flash('Item must be claimed before it can be returned.', 'error')
-        return redirect(url_for('report.list_all_found_reports'))
-    
-    try:
-        item.is_returned = True
-        db.session.commit()
-        flash('Item returned successfully', 'success')
-        return redirect(url_for('report.list_all_found_reports'))
-    except Exception as e:
-        db.session.rollback()
-        flash(f'Error returning item: {e}', 'error')
-        return redirect(url_for('report.list_all_found_reports'))
+    if request.method == 'POST':
+        user_id = request.form.get('user_id')
+        if not user_id:
+            flash('User ID is required to return the item.', 'error')
+            return redirect(url_for('report.return_item', found_report_id=found_report_id))
+
+        claim = Claim.query.filter_by(found_report_id=found_report_id, user_id=user_id).first()
+        if not claim:
+            flash('No claim found for this user and found report.', 'error')
+            return redirect(url_for('report.return_item', found_report_id=found_report_id))
+        
+        if found_report.user_id != current_user.id:
+            flash('You are not authorized to return this item.', 'error')
+            return redirect(url_for('report.list_all_found_reports'))
+
+        if not item.is_claimed:
+            flash('Item must be claimed before it can be returned.', 'error')
+            return redirect(url_for('report.list_all_found_reports'))
+
+        try:
+            item.is_returned = True
+            db.session.commit()
+            flash('Item returned successfully', 'success')
+            return redirect(url_for('report.list_all_found_reports'))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error returning item: {e}', 'error')
+            return redirect(url_for('report.list_all_found_reports'))
+
+    claims = Claim.query.filter_by(found_report_id=found_report_id).all()
+    return render_template('return_item.html', found_report_id=found_report_id, claims=claims)
+
 
 
 

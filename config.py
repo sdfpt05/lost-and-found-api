@@ -23,3 +23,5 @@ class Config:
     # Uploads folder configuration
     UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'static/uploads')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB limit for file uploads
+    # Flask-Babel configuration
+    LANGUAGES = ['en', 'es', 'fr', 'de', 'zh'] 

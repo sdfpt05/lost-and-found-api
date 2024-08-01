@@ -11,6 +11,7 @@
     <table>
         <thead>
             <tr>
+                <th>User ID</th>
                 <th>What was lost</th>
                 <th>Description</th>
                 <th>Date Lost</th>
@@ -22,6 +23,7 @@
         <tbody>
             {% for report in lost_reports %}
             <tr>
+                <td>{{ report.user_id }}</td>
                 <td>{{ report.item_name }}</td>
                 <td>{{ report.description }}</td>
                 <td>{{ report.date_lost.strftime('%Y-%m-%d') }}</td>
@@ -34,8 +36,31 @@
             {% endfor %}
         </tbody>
     </table>
+    <!-- Pagination Controls -->  
+    <div class="pagination">  
+        {% if lost_reports.has_prev %}  
+            <a href="{{ url_for('report.list_all_lost_reports', page=lost_reports.prev_num) }}" class="prev">Previous</a>  
+        {% endif %}  
+        <span>Page {{ lost_reports.page }} of {{ lost_reports.pages }}</span>  
+        {% if lost_reports.has_next %}  
+            <a href="{{ url_for('report.list_all_lost_reports', page=lost_reports.next_num) }}" class="next">Next</a>  
+        {% endif %}  
+    </div>  
 </main>
 <style>
-    
+    .pagination {  
+        margin: 1em 0;  
+        text-align: center;  
+    }  
+    .pagination a {  
+        margin: 0 5px;  
+        text-decoration: none;  
+        color: rgb(222, 182, 230);  
+    }  
+    .pagination span {  
+        margin: 0 5px;  
+    }   
+
+
 </style>
 {% endblock %}

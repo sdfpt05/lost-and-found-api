@@ -16,6 +16,9 @@
                 <th>User ID</th>
                 <th>Report ID</th>
                 <th>Claim reason</th>
+                <th>Date Claimed </th>
+                <th>Time Claimed</th>
+
             </tr>
         </thead>
         <tbody>
@@ -24,6 +27,8 @@
                 <td>{{ claim.user_id }}</td>
                 <td>{{ claim.found_report_id }}</td>
                 <td>{{ claim.description }}</td>
+                <td>{{ claim.date_claimed }}</td>
+                <td>{{ claim.time_claimed }}</td>
             </tr>
             {% endfor %}
         </tbody>

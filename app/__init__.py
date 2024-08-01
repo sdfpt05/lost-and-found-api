@@ -3,6 +3,7 @@ import secrets
 from flask import Flask, request
 from flask_cors import CORS
 from flask_login import LoginManager
+from flask_babel import Babel
 from flask_wtf.csrf import CSRFProtect
 from .extensions import db, migrate, bcrypt, login_manager, mail
 from .models import user, item, lost_report, found_report, claim, reward, comment, password_reset
@@ -10,13 +11,14 @@ from dotenv import load_dotenv
 
 login_manager = LoginManager()
 #csrf = CSRFProtect()
+#babel = Babel()
 
 def create_app():
     app = Flask(__name__)
 
     load_dotenv()
     
-    # Setup secret key from environment variable or generate one if not set
+    # Setup secret key from environment variable 
     app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY', secrets.token_hex(16))
     
     app.config.from_object('config.Config')
@@ -25,6 +27,7 @@ def create_app():
     register_extensions(app)
     register_blueprints(app)
     configure_cors(app)
+    #configure_babel(app)  
 
     @app.before_request
     def method_override():
@@ -43,6 +46,7 @@ def register_extensions(app):
     bcrypt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    #babel.init_app(app)  
     #csrf.init_app(app)
 
     @login_manager.user_loader
@@ -65,3 +69,7 @@ def register_blueprints(app):
 def configure_cors(app):
     CORS(app, send_wildcard=True, allow_headers=["Content-Type", "Authorization"])
 
+#def configure_babel(app):
+    #@babel.localeselector
+    #def get_locale():
+      #  return request.accept_languages.best_match(['en', 'es', 'fr', 'de', 'zh'])  # Add your supported languages here

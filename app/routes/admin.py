@@ -56,17 +56,30 @@ def add_item():
     return render_template('add_item.html')
 
 
-@bp.route('/list_items', methods=['GET'])
-@login_required
-@admin_required
-def list_items():
-    try:
-        items = Item.query.all()
-        return render_template('list_items.html', items=items)
-    except Exception as e:
-        flash(f'Error: {str(e)}', 'error')
-        return redirect(url_for('admin.dashboard'))
-
+@bp.route('/list_items', methods=['GET'])  
+@login_required  
+@admin_required  
+def list_items():  
+    try:  
+        # Get the current page number from the query parameters, default to 1  
+        page = request.args.get('page', 1, type=int)  
+        
+        # Number of items to display per page  
+        items_per_page = 5  
+        
+        # Query for items, paginating results  
+        items_query = Item.query.paginate(page=page, per_page=items_per_page)  
+        
+        # Pass items, current page, and total pages to the template  
+        return render_template(  
+            'list_items.html',  
+            items=items_query.items,  
+            current_page=items_query.page,  
+            total_pages=items_query.pages  
+        )  
+    except Exception as e:  
+        flash(f'Error: {str(e)}', 'error')  
+        return redirect(url_for('admin.dashboard')) 
 
 @bp.route('/items/<int:item_id>', methods=['GET', 'POST'])
 @login_required
@@ -107,16 +120,23 @@ def delete_item(item_id):
         return jsonify({'error': str(e)}), 500
 
 
-@bp.route('/reports/lost', methods=['GET'])
-@login_required
-@admin_required
-def view_lost_reports():
-    try:
-        lost_reports = LostReport.query.all()
-        return render_template('view_lost_reports.html', lost_reports=lost_reports)
-    except Exception as e:
-        flash(f'Error: {str(e)}', 'error')
-        return redirect(url_for('admin.dashboard'))
+@bp.route('/reports/lost', methods=['GET'])  
+@login_required  
+@admin_required  
+def view_lost_reports():  
+    try:  
+        # Get the page number from the query string; default is 1  
+        page = request.args.get('page', 1, type=int)  
+        per_page = 2  # Number of reports per page  
+
+        # Query the LostReport and paginate  
+        lost_reports_paginated = LostReport.query.paginate(page=page, per_page=per_page)  
+        
+        # Pass the pagination object to the template  
+        return render_template('view_lost_reports.html', lost_reports=lost_reports_paginated)  
+    except Exception as e:  
+        flash(f'Error: {str(e)}', 'error')  
+        return redirect(url_for('admin.dashboard')) 
 
 
 @bp.route('/reports/found', methods=['GET'])

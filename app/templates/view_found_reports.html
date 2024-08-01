@@ -13,27 +13,28 @@
     <table>
         <thead>
             <tr>
+                <th>User ID</th>
                 <th>Item ID</th>
                 <th>What was found</th>
                 <th>Description</th>
                 <th>Date Found</th>
                 <th>Place Found</th>
                 <th>Contact</th>
-                <th>Actions</th>
+               
             </tr>
         </thead>
         <tbody>
             {% for report in found_reports %}
             <tr>
+                <td>{{ report.user_id }}</td>
+                
                 <td>{{ report.item_id }}</td>
                 <td>{{ report.item_name }}</td>
                 <td>{{ report.description }}</td>
                 <td>{{ report.date_found }}</td>
                 <td>{{ report.place_found }}</td>
                 <td>{{ report.contact}}</td>
-                <td>
-                    <!-- Add actions if any -->
-                </td>
+                
             </tr>
             {% endfor %}
         </tbody>
