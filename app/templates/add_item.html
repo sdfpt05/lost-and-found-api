@@ -11,15 +11,18 @@
 </header>
 <main>
     <form action="{{ url_for('admin.add_item') }}" method="post" enctype="multipart/form-data">
-        <label for="name">Item Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
-        
-        <label for="description">Description:</label>
-        <textarea id="description" name="description"></textarea><br><br>
-        
-        <label for="image">Upload Image:</label>
+    <div class="form-group">
+        <label for="name">Item Name</label>
+        <input type="text" id="name" name="name" class="form-control" required><br><br>
+    </div>
+        <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" class="form-control"></textarea><br><br>
+    </div>
+    <div class="form-group">
+        <label for="image">Upload Image</label>
         <input type="file" id="image" name="image"><br><br>
-        
+    </div>
         <button type="submit">Add Item</button>
     </form>
 </main>
