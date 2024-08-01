@@ -31,7 +31,9 @@
                         <a href="{{ url_for('report.offer_reward', found_report_id=report.id) }}" class="btn">Offer Reward</a>
                         <a href="{{ url_for('report.pay_reward', found_report_id=report.id) }}" class="btn">Pay</a>
                         <a href="{{ url_for('report.receive_reward', found_report_id=report.id) }}" class="btn">Receive Reward</a>
-                        <a href="{{ url_for('report.return_item', found_report_id=report.id) }}" class="btn">Return</a>
+                        <form action="{{ url_for('report.return_item', found_report_id=report.id) }}" method="post">
+                            <button type="submit" class="btn">Return</button>
+                        </form>
                         <a href="{{ url_for('report.provide_comment', item_id=report.item_id) }}" class="btn">Comment</a>
                     </td>
                 </tr>
@@ -51,7 +53,7 @@
     .found-reports-container h1 {
         margin-bottom: 20px;
     }
-    
+
     .back-button {
         position: absolute;
         top: 20px;

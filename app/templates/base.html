@@ -141,7 +141,7 @@
     <header>
         <h1>ʟᴏsᴛ ᴀɴᴅ ғᴏᴜɴᴅ ᴀᴘɪ</h1>
         {% if current_user.is_authenticated %}
-            <p>Welcome, {{ current_user.username }} | <a href="{{ url_for('auth.logout') }}">Logout</a></p>
+            <p><i>Welcome, {{ current_user.username }}</i> | <a href="{{ url_for('auth.logout') }}">Logout</a></p>
         {% else %}
             <p>
                 <a href="{{ url_for('auth.login') }}">Login</a> |

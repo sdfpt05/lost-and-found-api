@@ -209,7 +209,7 @@ def offer_reward(found_report_id):
         data = request.form
         try:
             amount = float(data['amount'])
-            date_paid = datetime.strptime(data['date_paid'], '%Y-%m-%d').date()
+            
 
             if amount <= 0:
                 flash('Reward amount must be positive.', 'error')
@@ -224,7 +224,6 @@ def offer_reward(found_report_id):
 
             reward = Reward(
                 amount=amount,
-                date_paid=date_paid,
                 receiver_id=receiver.id,
                 receiver_username=receiver.username,
                 payer_username=current_user.username,
@@ -234,7 +233,7 @@ def offer_reward(found_report_id):
             db.session.add(reward)
             db.session.commit()
             flash('Reward offered successfully', 'success')
-            return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
+            return redirect(url_for('report.pay_reward', found_report_id=found_report_id))
         except ValueError:
             flash('Invalid data format. Ensure all fields are correct.', 'error')
             return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
@@ -319,6 +318,10 @@ def pay_reward(found_report_id):
         flash('No reward offered for this found report. Please offer a reward first.', 'error')
         return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
 
+    #if reward.date_paid:
+       #flash('This reward has already been paid. Please offer a new reward.', 'error')
+        #return redirect(url_for('report.offer_reward', found_report_id=found_report_id))
+
     if request.method == 'POST':
         data = request.form
         try:
@@ -329,7 +332,10 @@ def pay_reward(found_report_id):
                 flash('Reward amount must be positive.', 'error')
                 return redirect(url_for('report.pay_reward', found_report_id=found_report_id))
 
-            reward.amount = amount
+            #if amount != reward.amount:
+                #flash('Entered amount does not match the offered reward amount.', 'error')
+                #return redirect(url_for('report.pay_reward', found_report_id=found_report_id))
+
             reward.date_paid = date_paid
             db.session.commit()
             flash('Reward paid successfully', 'success')
@@ -342,6 +348,7 @@ def pay_reward(found_report_id):
             return redirect(url_for('report.pay_reward', found_report_id=found_report_id))
 
     return render_template('pay_reward.html', found_report=found_report)
+
 
 @bp.route('/return_item/<int:found_report_id>', methods=['POST'])
 @login_required

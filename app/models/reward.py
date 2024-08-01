@@ -4,7 +4,7 @@ from sqlalchemy.sql import func
 class Reward(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float, nullable=False)
-    date_paid = db.Column(db.Date, nullable=False)
+    date_paid = db.Column(db.Date, nullable=True)
     date_offered = db.Column(db.Date, server_default=func.current_date(), nullable=True)
     receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     receiver_username = db.Column(db.String(80), nullable=False)
