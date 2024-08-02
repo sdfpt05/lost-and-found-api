@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for
+from flask import Blueprint, request, jsonify
 from werkzeug.utils import secure_filename
 import os
 from flask_login import login_required, current_user
@@ -18,13 +18,16 @@ def allowed_file(filename):
 def upload_item_image(item_id):
     item = Item.query.get_or_404(item_id)
     if 'file' not in request.files:
-        return redirect(request.url)
+        return jsonify({"error": "No file part"}), 400
     file = request.files['file']
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file_path = os.path.join(UPLOAD_FOLDER, filename)
         file.save(file_path)
-        item.image_url = url_for('static', filename=f'uploads/{filename}')
+        item.image_url = url_for('static', filename=f'uploads/{filename}', _external=True)
         db.session.commit()
-        return redirect(url_for('user.dashboard'))
-    return 'File not allowed', 400
+        return jsonify({"success": True, "image_url": item.image_url}), 200
+    return jsonify({"error": "File not allowed"}), 400
+

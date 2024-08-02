@@ -26,4 +26,4 @@ def provide_comment(item_id):
     return jsonify({
         'message': 'Comment added successfully',
         'comment': comment.to_dict()
-    }), 201
+    }), 200
