@@ -40,19 +40,17 @@
                 {% endfor %}
             </tbody>
         </table>
-     
-
     </div>
-        <!-- Pagination Controls -->  
-        <div class="pagination">  
-            {% if found_reports.has_prev %}  
-                <a href="{{ url_for('report.list_all_found_reports', page=found_reports.prev_num) }}" class="prev">Previous</a>  
-            {% endif %}  
-            <span>Page {{ found_reports.page }} of {{ found_reports.pages }}</span>  
-            {% if found_reports.has_next %}  
-                <a href="{{ url_for('report.list_all_found_reports', page=found_reports.next_num) }}" class="next">Next</a>  
-            {% endif %}  
-        </div> 
+    <!-- Pagination Controls -->  
+    <div class="pagination">  
+        {% if found_reports.has_prev %}  
+            <a href="{{ url_for('report.list_all_found_reports', page=found_reports.prev_num) }}" class="prev">Previous</a>  
+        {% endif %}  
+        <span>Page {{ found_reports.page }} of {{ found_reports.pages }}</span>  
+        {% if found_reports.has_next %}  
+            <a href="{{ url_for('report.list_all_found_reports', page=found_reports.next_num) }}" class="next">Next</a>  
+        {% endif %}  
+    </div> 
 </main>
 
 <style>
@@ -159,7 +157,5 @@
     .pagination span {  
         margin: 0 5px;  
     }   
-
 </style>
 {% endblock %}
-

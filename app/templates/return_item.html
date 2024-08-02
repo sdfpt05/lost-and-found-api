@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{{ url_for('report.list_all_found_reports') }}" class="back-button" title="Back to found reports">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+    </svg>
+</a>
+<div class="container">
+    <h2>Return Item</h2>
+    <form method="POST" action="{{ url_for('report.return_item', found_report_id=found_report_id) }}">
+        <div class="form-group">
+            <label for="user_id">Select User to Return Item To:</label>
+            <select class="form-control" id="user_id" name="user_id" required>
+                {% for claim in claims %}
+                    <option value="{{ claim.user_id }}">{{ claim.user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Return Item</button>
+    </form>
+</div>
+<style>
+    .back-button {
+       position: absolute;
+       top: 20px;
+       left: 20px;
+       background-color: #bda9b9;
+       color: white;
+       width: 32px;
+       height: 32px;
+       border-radius: 50%;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       text-decoration: none;
+       transition: background-color 0.3s ease;
+   }
+
+   .back-button:hover {
+       background-color: #a55ea8;
+   }
+
+   .back-button svg {
+       width: 20px;
+       height: 20px;
+   }
+</style>
+{% endblock %}

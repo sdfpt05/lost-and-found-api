@@ -377,24 +377,15 @@ def pay_reward(found_report_id):
 
     return render_template('pay_reward.html', found_report=found_report)
 
-
 @bp.route('/return_item/<int:found_report_id>', methods=['GET', 'POST'])
 @login_required
 def return_item(found_report_id):
     found_report = FoundReport.query.get_or_404(found_report_id)
     item = found_report.item
-    
+
     if request.method == 'POST':
         user_id = request.form.get('user_id')
-        if not user_id:
-            flash('User ID is required to return the item.', 'error')
-            return redirect(url_for('report.return_item', found_report_id=found_report_id))
 
-        claim = Claim.query.filter_by(found_report_id=found_report_id, user_id=user_id).first()
-        if not claim:
-            flash('No claim found for this user and found report.', 'error')
-            return redirect(url_for('report.return_item', found_report_id=found_report_id))
-        
         if found_report.user_id != current_user.id:
             flash('You are not authorized to return this item.', 'error')
             return redirect(url_for('report.list_all_found_reports'))
@@ -402,6 +393,15 @@ def return_item(found_report_id):
         if not item.is_claimed:
             flash('Item must be claimed before it can be returned.', 'error')
             return redirect(url_for('report.list_all_found_reports'))
+
+        if item.is_returned:
+            flash('Item is already returned.', 'error')
+            return redirect(url_for('report.list_all_found_reports'))
+
+        claim = Claim.query.filter_by(found_report_id=found_report_id, user_id=user_id).first()
+        if not claim:
+            flash('Invalid user ID or no claim found for this item.', 'error')
+            return redirect(url_for('report.return_item', found_report_id=found_report_id))
 
         try:
             item.is_returned = True
@@ -415,6 +415,7 @@ def return_item(found_report_id):
 
     claims = Claim.query.filter_by(found_report_id=found_report_id).all()
     return render_template('return_item.html', found_report_id=found_report_id, claims=claims)
+
 
 
 
