@@ -17,3 +17,15 @@ class Claim(db.Model):
         self.user_id = user_id
         self.found_report_id = found_report_id
         self.description = description
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'found_report_id': self.found_report_id,
+            'description': self.description,
+            'date_claimed': self.date_claimed.isoformat() if self.date_claimed else None,
+            'time_claimed': self.time_claimed.isoformat() if self.time_claimed else None,
+            'claim_user': self.claim_user,
+            'found_report':  self.found_report 
+        }

@@ -61,7 +61,7 @@ def login():
         return jsonify({'error': 'Invalid email or password'}), 401
 
 @bp.route('/logout')
-@login_required
+# @login_required
 def logout():
     logout_user()
     return jsonify({'message': 'You have been logged out'}), 200

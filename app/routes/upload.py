@@ -14,7 +14,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @bp.route('/item/<int:item_id>', methods=['POST'])
-@login_required
+# @login_required
 def upload_item_image(item_id):
     item = Item.query.get_or_404(item_id)
     if 'file' not in request.files:

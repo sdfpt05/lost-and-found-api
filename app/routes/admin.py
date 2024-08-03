@@ -12,8 +12,8 @@ from app.utils.decorators import admin_required
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 @bp.route('/dashboard')
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def dashboard():
     try:
         lost_reports = LostReport.query.all()
@@ -30,8 +30,8 @@ def dashboard():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/items', methods=['GET', 'POST'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def add_item():
     if request.method == 'POST':
         try:
@@ -54,8 +54,8 @@ def add_item():
     return jsonify({'error': 'Method not allowed'}), 405
 
 @bp.route('/list_items', methods=['GET'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def list_items():
     try:
         page = request.args.get('page', 1, type=int)
@@ -73,8 +73,8 @@ def list_items():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/items/<int:item_id>', methods=['GET', 'PUT', 'DELETE'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def manage_item(item_id):
     item = Item.query.get_or_404(item_id)
     
@@ -103,8 +103,8 @@ def manage_item(item_id):
             return jsonify({'error': str(e)}), 500
 
 @bp.route('/reports/lost', methods=['GET'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def view_lost_reports():
     try:
         page = request.args.get('page', 1, type=int)
@@ -122,8 +122,8 @@ def view_lost_reports():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/reports/found', methods=['GET'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def view_found_reports():
     try:
         found_reports = FoundReport.query.all()
@@ -132,8 +132,8 @@ def view_found_reports():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/claims', methods=['GET'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def view_claims():
     try:
         claims = Claim.query.all()
@@ -142,8 +142,8 @@ def view_claims():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/rewards', methods=['GET'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def view_rewards():
     try:
         rewards = Reward.query.all()
@@ -152,8 +152,8 @@ def view_rewards():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/reports/lost/<int:lost_report_id>/approve', methods=['POST'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def approve_lost_report(lost_report_id):
     try:
         report = LostReport.query.get_or_404(lost_report_id)
@@ -167,8 +167,8 @@ def approve_lost_report(lost_report_id):
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/list_recovered_items', methods=['GET'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def list_recovered_items():
     try:
         recovered_items = Item.query.join(FoundReport).filter(FoundReport.item_id == Item.id).all()
@@ -177,8 +177,8 @@ def list_recovered_items():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/list_returned_items', methods=['GET'])
-@login_required
-@admin_required
+# @login_required
+# @admin_required
 def list_returned_items():
     try:
         returned_items = Item.query.filter_by(is_returned=True).all()

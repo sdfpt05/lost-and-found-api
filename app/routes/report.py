@@ -38,7 +38,7 @@ def handle_image_upload(file, item_id):
         return None
 
 @bp.route('/lost', methods=['POST'])
-@login_required
+# @login_required
 def report_lost_item():
     data = request.json
     file = request.files.get('upload_image')
@@ -82,7 +82,7 @@ def report_lost_item():
         return jsonify({'error': f'Error saving lost report: {str(e)}'}), 500
 
 @bp.route('/found', methods=['POST'])
-@login_required
+# @login_required
 def report_found_item():
     data = request.json
     file = request.files.get('upload_image')
@@ -123,7 +123,7 @@ def report_found_item():
         return jsonify({'error': f'Error saving found report: {str(e)}'}), 500
 
 @bp.route('/comments/<int:item_id>', methods=['GET'])
-@login_required
+# @login_required
 def get_comments(item_id):
     comments = Comment.query.filter_by(item_id=item_id).all()
     return jsonify([{
@@ -134,7 +134,7 @@ def get_comments(item_id):
     } for comment in comments])
 
 @bp.route('/comments/provide/<int:item_id>', methods=['POST'])
-@login_required
+# @login_required
 def provide_comment(item_id):
     data = request.json
     content = data.get('content')
@@ -147,7 +147,7 @@ def provide_comment(item_id):
     return jsonify({'message': 'Comment added successfully'}), 201
 
 @bp.route('/initiate_claim/<int:found_report_id>', methods=['POST'])
-@login_required
+# @login_required
 def initiate_claim(found_report_id):
     found_report = FoundReport.query.get_or_404(found_report_id)
     user_lost_report = LostReport.query.filter_by(user_id=current_user.id, item_id=found_report.item_id).first()
@@ -172,7 +172,7 @@ def initiate_claim(found_report_id):
         return jsonify({'error': f'Error initiating claim: {str(e)}'}), 500
 
 @bp.route('/offer_reward/<int:found_report_id>', methods=['POST'])
-@login_required
+# @login_required
 def offer_reward(found_report_id):
     data = request.json
     try:
@@ -204,7 +204,7 @@ def offer_reward(found_report_id):
         return jsonify({'error': f'Missing field: {str(e)}'}), 400
 
 @bp.route('/receive_reward/<int:found_report_id>', methods=['POST'])
-@login_required
+# @login_required
 def receive_reward(found_report_id):
     found_report = FoundReport.query.get_or_404(found_report_id)
     
@@ -243,7 +243,7 @@ def receive_reward(found_report_id):
         return jsonify({'error': f'Missing field: {str(e)}'}), 400
 
 @bp.route('/list_found_reports', methods=['GET'])
-@login_required
+# @login_required
 def list_all_found_reports():
     try:
         page = request.args.get('page', 1, type=int)
@@ -270,7 +270,7 @@ def list_all_found_reports():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/list_lost_reports', methods=['GET'])
-@login_required
+# @login_required
 def list_all_lost_reports():
     try:
         page = request.args.get('page', 1, type=int)
@@ -297,7 +297,7 @@ def list_all_lost_reports():
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/pay_reward/<int:found_report_id>', methods=['POST'])
-@login_required
+# @login_required
 def pay_reward(found_report_id):
     found_report = FoundReport.query.get_or_404(found_report_id)
 
@@ -322,7 +322,7 @@ def pay_reward(found_report_id):
         return jsonify({'error': f'Missing field: {str(e)}'}), 400
 
 @bp.route('/return_item/<int:found_report_id>', methods=['POST'])
-@login_required
+# @login_required
 def return_item(found_report_id):
     found_report = FoundReport.query.get_or_404(found_report_id)
     item = found_report.item
@@ -352,7 +352,7 @@ def return_item(found_report_id):
         return jsonify({'error': f'Error returning item: {str(e)}'}), 500
 
 @bp.route('/my_rewards', methods=['GET'])
-@login_required
+# @login_required
 def view_my_rewards():
     rewards_received = Reward.query.filter_by(receiver_id=current_user.id).all()
     rewards_paid = Reward.query.filter_by(payer_id=current_user.id).all()
