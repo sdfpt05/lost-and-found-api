@@ -20,13 +20,44 @@ def dashboard():
         found_reports = FoundReport.query.all()
         claims = Claim.query.all()
         rewards = Reward.query.all()
+        
+        lost_reports_dict = []
+        found_reports_dict = []
+        claims_dict = []
+        rewards_dict = []
+        
+        for report in lost_reports:
+            try:
+                lost_reports_dict.append(report.to_dict())
+            except Exception as e:
+                print(f"Error in LostReport.to_dict(): {str(e)}")
+        
+        for report in found_reports:
+            try:
+                found_reports_dict.append(report.to_dict())
+            except Exception as e:
+                print(f"Error in FoundReport.to_dict(): {str(e)}")
+        
+        for claim in claims:
+            try:
+                claims_dict.append(claim.to_dict())
+            except Exception as e:
+                print(f"Error in Claim.to_dict(): {str(e)}")
+        
+        for reward in rewards:
+            try:
+                rewards_dict.append(reward.to_dict())
+            except Exception as e:
+                print(f"Error in Reward.to_dict(): {str(e)}")
+        
         return jsonify({
-            'lost_reports': [report.to_dict() for report in lost_reports],
-            'found_reports': [report.to_dict() for report in found_reports],
-            'claims': [claim.to_dict() for claim in claims],
-            'rewards': [reward.to_dict() for reward in rewards]
+            'lost_reports': lost_reports_dict,
+            'found_reports': found_reports_dict,
+            'claims': claims_dict,
+            'rewards': rewards_dict
         }), 200
     except Exception as e:
+        print(f"Error in dashboard route: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
 @bp.route('/items', methods=['GET', 'POST'])

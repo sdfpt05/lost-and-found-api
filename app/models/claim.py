@@ -26,6 +26,6 @@ class Claim(db.Model):
             'description': self.description,
             'date_claimed': self.date_claimed.isoformat() if self.date_claimed else None,
             'time_claimed': self.time_claimed.isoformat() if self.time_claimed else None,
-            'claim_user': self.claim_user,
-            'found_report':  self.found_report 
+            'claim_user_username': self.claim_user.username if self.claim_user else None,
+            'found_report_item_name': self.found_report.item_name if self.found_report else None
         }
