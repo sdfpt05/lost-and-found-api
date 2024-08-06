@@ -1,5 +1,5 @@
-from flask import Blueprint, request, jsonify
-from flask_login import login_user, logout_user, login_required
+from flask import Blueprint, request, jsonify, redirect, url_for, flash
+from flask_login import login_user, logout_user, login_required, current_user
 from app.models.user import User
 from app.extensions import db, bcrypt
 
@@ -7,15 +7,18 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/register', methods=['POST'])
 def register():
-    data = request.json
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'Invalid input'}), 400
+
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
     confirm_password = data.get('confirm_password')
     role = data.get('role', 'user')  # Default to 'user' if not provided
 
-    if not all([username, email, password, confirm_password]):
-        return jsonify({'error': 'All fields are required'}), 400
+    if not username or not email or not password or not confirm_password:
+        return jsonify({'error': 'Missing required fields'}), 400
 
     if password != confirm_password:
         return jsonify({'error': 'Passwords do not match'}), 400
@@ -30,38 +33,31 @@ def register():
         password_hash=hashed_password,
         role=role
     )
+
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({'message': 'Registration successful'}), 200
+    return jsonify({'message': 'Registration successful!'}), 201
 
 @bp.route('/login', methods=['POST'])
 def login():
-    data = request.json
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'Invalid input'}), 400
+
     email = data.get('email')
     password = data.get('password')
-
-    if not email or not password:
-        return jsonify({'error': 'Email and password are required'}), 400
-
     user = User.query.filter_by(email=email).first()
+
     if user and user.check_password(password):
         login_user(user)
-        return jsonify({
-            'message': 'Login successful',
-            'user': {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email,
-                'role': user.role,
-                'is_admin': user.is_admin()
-            }
-        }), 200
+        print(f"User logged in with role: {user.role}")  # Debug line to print the role
+        return jsonify({'message': 'Login successful!', 'role': user.role, 'username': user.username}), 200
     else:
-        return jsonify({'error': 'Invalid email or password'}), 401
+        return jsonify({'error': 'Login failed. Check your email and password.'}), 400
 
-@bp.route('/logout')
+@bp.route('/logout', methods=['POST'])
 # @login_required
 def logout():
     logout_user()
-    return jsonify({'message': 'You have been logged out'}), 200
+    return jsonify({'message': 'You have been logged out.'}), 200
